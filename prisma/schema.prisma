@@ -9,9 +9,24 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-model equipments{
-EquipmentID Int @unique
-EquipmentName String @db.VarChar(255)
-ServiceProvider String @db.VarChar(255)
 
+model Supply {
+  name String @db.VarChar(255)
+  id Int @id @default(autoincrement())
+  supplierName String @db.VarChar(255)
+  supplierContact String @db.VarChar(255)
+  stockLevel Int?
+  addedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
+model Equipments {
+  name String @db.VarChar(255)
+  id Int @id @default(autoincrement())
+  surviceProider String @db.VarChar(255)
+  // supplierContact String @db.VarChar(255)
+  // stockLevel Int?
+  buyingDate DateTime @default(now())
+  maintinanceDate DateTime @updatedAt  
+}
+
