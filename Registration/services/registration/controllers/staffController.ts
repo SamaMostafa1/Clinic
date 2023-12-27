@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { error } from 'console';
 import { Request, Response } from 'express';
 // import { PrismaClient } from '@prisma/client';
@@ -30,12 +31,12 @@ export const getAllstaff = async (req: Request, res: Response) => {
 //-------------------Get  all staff User By ID-----------------------
 export const getALLStaffById = async (req: Request, res: Response) => {
 //   const getALLStaffById = async (req, res) => {
-  const {userID } = req.params;
+  const {userId} = req.params;
   try {
-    console.log(userID);
+    console.log(userId);
     const userMember = await prisma.user.findUnique({
       where: {
-        userId: parseInt(userID,10),
+        userId: parseInt(userId,10),
         OR: [
           { role: "Doctor" },
           { role: "Admin" }
@@ -58,11 +59,11 @@ export const getALLStaffById = async (req: Request, res: Response) => {
 //-------------------Get  all docotrs By clinicID-----------------------
 export const getDoctorsByClinicID  = async (req: Request, res: Response) => {
 //   const getDoctorsByClinicID = async (req, res) => {
-    const {clinicID } = req.params;
+    const {clinicId } = req.params;
     try {
       const userMember = await prisma.user.findMany({
         where: {
-          clinicId : parseInt(clinicID),
+          clinicId : parseInt(clinicId),
           role: "Doctor",
         },
       });
@@ -82,23 +83,44 @@ export const getDoctorsByClinicID  = async (req: Request, res: Response) => {
 export const createStaff = async (req: Request, res: Response) => {
 
   const userData = req.body;
-
   try {
-    if(userData.role=="Doctor" || userData.role=="Admin"){
+    if(userData.role=="Patient"){
+      throw new Error('Invalid role or unmatched data');
+    }else if(!userData.gender || !userData.firstName||!userData.lastName
+      ||!userData.email||!userData.phoneNumber||!userData.role
+      ||!userData.password||!userData.userName) {
+          throw new Error('Missing required data');
+    }else{
       const newUser = await prisma.user.create({
         data: userData,
       });
       res.status(201).json({ data: newUser });
-    }else{
-      // console.log(error);
-      res.status(404).json({ error: 'unmatched data' });
-      
     }
     
-  } catch (error) {
+  } catch (error:any) {
     console.error(error);
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') { // uique value error
+        const targetArray = error.meta?.target as string[]; // Type assertion
+        if (targetArray && targetArray.includes('ssn')) {
+          res.status(400).json({ error: 'SSN must be unique' });
+        } else if (targetArray && targetArray.includes('userName')) {
+          res.status(400).json({ error: 'Username must be unique' });
+        } else {
+          // Handle other Prisma known errors
+          res.status(400).json({ error: 'Invalid request to the database' });
+        }
+    }
+    }else if (error instanceof Prisma.PrismaClientValidationError) {
+      // Handle validation errors
+      res.status(422).json({ error: 'Validation error in database request' });
+    }
+    else if (error.message === 'Invalid role or unmatched data' ||error.message === 'Missing required data'){
+      res.status(400).json({ error: error.message });
+    }
+    else{
     res.status(500).json({ error: 'Internal Server Error' });
-    // res.status(500).json({message: error.message});
+    }
     
   } finally {
     await prisma.$disconnect();
@@ -108,22 +130,38 @@ export const createStaff = async (req: Request, res: Response) => {
 //-------------------Update staff-----------------------
 export const updateStaff = async (req: Request, res: Response) => {
 //   const updateUser = async (req, res) => {
-  const { userID } = req.params;
+  const { userId } = req.params;
   const userData = req.body;
 
   try {
     const updatedUser = await prisma.user.update({
       where: {
-        userId: parseInt(userID),
+        userId: parseInt(userId),
        
       },
       
       data: userData,
     });
     res.status(200).json({ data: updatedUser });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+  } catch (error:any) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') { // uique value error
+        const targetArray = error.meta?.target as string[]; // Type assertion
+        if (targetArray && targetArray.includes('ssn')) {
+          res.status(400).json({ error: 'SSN must be unique' });
+        } else if (targetArray && targetArray.includes('userName')) {
+          res.status(400).json({ error: 'Username must be unique' });
+        } else {
+          // Handle other Prisma known errors
+          res.status(400).json({ error: 'Invalid request to the database' });
+        }
+    }
+    }else if (error instanceof Prisma.PrismaClientValidationError) {
+      // Handle validation errors
+      res.status(422).json({ error: 'Validation error in database request' });
+    }else{
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   } finally {
     await prisma.$disconnect();
   }
@@ -133,12 +171,12 @@ export const updateStaff = async (req: Request, res: Response) => {
 //-------------------Delete Staff -----------------------
 export const deleteStaff = async (req: Request, res: Response) => {
 //  const deleteUser = async (req, res) => {
-  const { userID } = req.params;
+  const { userId } = req.params;
 
   try {
     await prisma.user.delete({
       where: {
-        userId: parseInt(userID, 10),
+        userId: parseInt(userId, 10),
         OR: [
           { role: "Doctor" },
           { role: "Admin" }

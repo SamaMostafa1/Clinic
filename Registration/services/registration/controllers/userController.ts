@@ -48,15 +48,15 @@ export const getALLUserById = async (req: Request, res: Response) => {
 };  
 
 //-------------------Get User By userName-----------------------
-export const getALLUserByUserName = async (req: Request, res: Response) => {
+export const getUserByUserName = async (req: Request, res: Response) => {
   // const getALLUserById = async (req, res) => {
-  const {UserName } = req.params;
+  const {userName } = req.params;
 
   try {
     // console.log(userID);
     const userMember = await prisma.user.findUnique({
       where: {
-        userName: UserName,
+        userName: userName,
       }
     });
     if (!userMember) {
