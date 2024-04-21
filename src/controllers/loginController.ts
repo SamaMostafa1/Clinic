@@ -43,22 +43,24 @@ export const loginUser = async (req: Request, res: Response) => {
       { userId: user.userId },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: '5m' }
-  );
+    );
 
     // Generate refresh token
-  // const refreshToken = jwt.sign(
-  //     { userId: user.userId },
-  //     process.env.REFERSH_TOKEN_SECRET,
-  //     { expiresIn: '1d' }
-  // );
+//   const refreshToken = jwt.sign(
+//       { userId: user.userId },
+//       process.env.REFERSH_TOKEN_SECRET,
+//       { expiresIn: '1d' }
+//   );
   
-  //   const savedToken = await prisma.user.create({
-  //     data: {
-  //       userName:userName,
-  //       refreshToken: refreshToken
-  //     }
-  // });
-    //  res.cookie('jwt', refreshToken, { httpOnly: true,  secure: true, maxAge: 24 * 60 * 60 * 1000 });
+//   const updatedUser = await prisma.user.update({
+//     where: {
+//       userName: userName // Specify the condition to identify the user to update
+//     },
+//     data: {
+//       refreshToken: refreshToken // Provide the new value for refreshToken
+//     }
+// });
+//      res.cookie('jwt', refreshToken, { httpOnly: true,  secure: true, maxAge: 24 * 60 * 60 * 1000 });
     res.status(200).json({ accessToken: accessToken});
   } catch (error) {
     console.error(error);
@@ -68,6 +70,10 @@ export const loginUser = async (req: Request, res: Response) => {
   }
 };
 
-export const logedIn = async (req: Request, res: Response) => {
-  return res.status(200).json({ message: "You are innnnn" });
+// export const logedIn = async (req: Request, res: Response) => {
+//   return res.status(200).json({ message: "You are innnnn" });
+// };
+
+export const logedIn= async (req: Request, res: Response) => {
+  return res.status(200).json({ data:req.user});
 };

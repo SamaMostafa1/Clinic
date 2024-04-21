@@ -24,6 +24,6 @@ model User {
   userName               String   @unique
   // clinicId               Int?
   createdAt              DateTime @default(now())
-  // refreshToken           String?
+  refreshToken           String?
 
 }

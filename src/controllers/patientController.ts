@@ -14,8 +14,7 @@ export const createPatient = async (req: Request, res: Response) => {
       throw new Error('Invalid role or unmatched data');
     }
     else if(!patientData.gender || !patientData.firstName||!patientData.lastName||!patientData.email||
-      !patientData.phoneNumber||!patientData.role||!patientData.password||!patientData.userName||
-      !patientData. insurancePersentage||!patientData.emergencyContactName ||!patientData.emergencyContactNumber) {
+      !patientData.phoneNumber||!patientData.role||!patientData.password||!patientData.userName) {
       throw new Error('Missing required data');
     }
     else{
