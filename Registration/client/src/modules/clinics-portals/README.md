@@ -1,3 +1,0 @@
-# HealU
-
-Clinics Portals Module

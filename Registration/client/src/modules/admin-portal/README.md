@@ -1,3 +1,0 @@
-# HealU
-
-Admin Portal Module

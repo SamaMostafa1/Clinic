@@ -1,3 +1,0 @@
-# HealU
-
-Ophthalmology Clinic Module
