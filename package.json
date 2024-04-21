@@ -31,5 +31,13 @@
     "form-data": "^4.0.0",
     "jsonwebtoken": "^9.0.2"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SamaMostafa1/Clinic.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SamaMostafa1/Clinic/issues"
+  },
+  "homepage": "https://github.com/SamaMostafa1/Clinic#readme",
   "description": ""
 }

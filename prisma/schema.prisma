@@ -22,8 +22,8 @@ model User {
   ssn                    String   @unique
   password               String
   userName               String   @unique
-  clinicId               Int?
+  // clinicId               Int?
   createdAt              DateTime @default(now())
-  refreshToken           String?
+  // refreshToken           String?
 
 }

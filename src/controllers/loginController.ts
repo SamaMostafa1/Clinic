@@ -1,9 +1,14 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import hashing from '../Scripts/hashing';
+
 const jwt=require("jsonwebtoken");
 require("dotenv").config();
+const fsPromises = require('fs').promises;
+const path = require('path');
+
 const prisma = new PrismaClient();
+
 export interface IUser {
   name: string;
   email: string;
@@ -39,8 +44,8 @@ export const loginUser = async (req: Request, res: Response) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: '5m' }
   );
-  
-  // Generate refresh token
+
+    // Generate refresh token
   // const refreshToken = jwt.sign(
   //     { userId: user.userId },
   //     process.env.REFERSH_TOKEN_SECRET,
@@ -62,6 +67,7 @@ export const loginUser = async (req: Request, res: Response) => {
     await prisma.$disconnect();
   }
 };
-export const logedIn= async (req: Request, res: Response) => {
-  return res.status(200).json({ data:req.user});
+
+export const logedIn = async (req: Request, res: Response) => {
+  return res.status(200).json({ message: "You are innnnn" });
 };

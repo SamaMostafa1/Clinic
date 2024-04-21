@@ -4,6 +4,8 @@ import express from 'express';
 import * as staffController from '../controllers/staffController';
 const router = express.Router();
 
+const verifyJWT = require('../middleWare/verifyJWT');
+
 router.get('/', staffController.getAllstaff); //  doctors and admin
 router.get('/:userId', staffController.getStaffById);
 router.get('/clinic/:clinicId', staffController.getDoctorsByClinicID);
