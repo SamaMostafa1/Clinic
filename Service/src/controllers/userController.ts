@@ -26,7 +26,6 @@ export const getUserById = async (req: Request, res: Response) => {
     if (isNaN(parsedUserId)) {
       throw new Error('Invalid userId format. Please enter a valid Number.');
     }
-    console.log(userId);
     const userMember = await prisma.user.findUnique({
       where: {
         userId: parsedUserId,
@@ -49,7 +48,6 @@ export const getUserById = async (req: Request, res: Response) => {
 export const getUserByUserName = async (req: Request, res: Response) => {
   const {userName } = req.params;
   try {
-    console.log(userName);
     const userMember = await prisma.user.findUnique({
       where: {
         userName: userName,

@@ -9,19 +9,6 @@ const path = require('path');
 
 const prisma = new PrismaClient();
 
-export interface IUser {
-  name: string;
-  email: string;
-  password: string;
-  repeatPassword?: string | undefined;
-}
-declare global {
-  namespace Express {
-      export interface Request {
-          user: Partial<IUser>
-      }
-  }
-}
 export const loginUser = async (req: Request, res: Response) => {
   const { userName, password } = req.body;
 

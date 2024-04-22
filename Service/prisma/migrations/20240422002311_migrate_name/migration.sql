@@ -11,8 +11,6 @@ CREATE TABLE "User" (
     "ssn" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "userName" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "refreshToken" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("userId")
 );

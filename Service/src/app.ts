@@ -6,7 +6,7 @@ import patientRouter from './routes/patientRoute';
 import loginRouter from './routes/loginRoute';
 import cors from 'cors';
 
-const verifyJWT = require('./middleWare/verifyJWT');
+const verifyToken = require('./middleWare/verifyToken');
 const cookieParser = require('cookie-parser');
 
 const app = express();
@@ -30,10 +30,10 @@ app.use('/login', loginRouter);
 
 app.use('/staff', staffRouter);
 app.use('/patient', patientRouter);
-
-app.use(verifyJWT);
-// EMR Paths
 app.use('/user',userRouter );
+// app.use(verifyToken);
+// EMR Paths
+
 
 
 // app.use('/logedIn', logedIn);
