@@ -5,7 +5,8 @@ import { Request, Response, NextFunction } from 'express'; // Import NextFunctio
 const prisma = new PrismaClient();
 const verifyDoctor= async (req: Request, res: Response, next: NextFunction) => {
     const user=req.user;
-    if(user.role="Doctor"){
+    console.log(user.role)
+    if(user.role=="Doctor"){
         next();
     }else{
         next( res.sendStatus(401));

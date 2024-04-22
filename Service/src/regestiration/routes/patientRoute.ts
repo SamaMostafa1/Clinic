@@ -6,6 +6,7 @@ const verifyPatient = require('../middleWare/verifyPatient');
 const router = express.Router();
 
 router.post('/', patientController.createPatient);
+router.get('/doctor/:doctorId',[verifyToken,verifyDoctor], patientController.getPatientByDoctorId );
 router.put('/:userId',[verifyToken,verifyPatient],patientController.updatePatient);
 router.get('/:userId',[verifyToken,verifyPatient] ,patientController.getPatientById);
 router.delete('/:userId', patientController.deletePatient);
