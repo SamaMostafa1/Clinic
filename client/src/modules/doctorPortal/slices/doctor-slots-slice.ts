@@ -83,6 +83,7 @@ const slotsSlice = createSlice({
     builder.addCase(getSlots.rejected, (state, _) => {
       state.loading = false;
     });
+    
   },
 });
 

@@ -27,7 +27,7 @@ const initialState: AuthState = {
 export const login = createAsyncThunk("auth/login", (data: any, thunkApi) => {
   const { rejectWithValue } = thunkApi;
   return axios
-    .post("http://localhost:10000/login/", data, {
+    .post("http://localhost:3005/login", data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -44,16 +44,17 @@ export const login = createAsyncThunk("auth/login", (data: any, thunkApi) => {
 
 export const getData = createAsyncThunk("auth/getData", (token: string) => {
   return axios
-    .get("http://localhost:10000/data", {
+    .get("http://localhost:10000/patient/doctor/1", {
       headers: {
-        Authorization: `Bearer ${token}`,
+        "Authorization":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiO…zIxfQ.o0LVm3YyVPRJfiBNRG9Ze8hn19r4RCYIkaXrQFwjLhg",
       },
     })
     .then((res) => {
       console.log("res", res.data);
       return res.data;
     });
-})
+});
 
 const authSlice = createSlice({
   name: "auth",
@@ -76,6 +77,9 @@ const authSlice = createSlice({
     builder.addCase(login.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload as string;
+    });
+    builder.addCase(getData.rejected, (state, action) => {
+      console.log(action.payload);
     });
   },
 });

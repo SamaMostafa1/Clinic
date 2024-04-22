@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { Prisma } from '@prisma/client';
 import { error } from 'console';
 import { Request, Response } from 'express';
@@ -100,6 +103,7 @@ export const createStaff = async (req: Request, res: Response) => {
       });
       res.status(201).json({ data: newUser });
     } 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error:any) {
     validate.handleErrors(error, res);
 

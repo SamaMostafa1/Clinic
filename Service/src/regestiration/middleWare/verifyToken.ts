@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { PrismaClient } from '@prisma/client';
-import { User } from "@prisma/client";
-import  express from "express";
+
 import { Request, Response, NextFunction } from 'express'; // Import NextFunction
 const jwt = require("jsonwebtoken");
 require("dotenv").config();

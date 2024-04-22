@@ -16,12 +16,14 @@ interface PatientState {
   patients: Patient[];
   loading: boolean;
   error: string;
+  isVisible?: boolean;
 }
 
 const initialState: PatientState = {
   patients: [],
   loading: false,
   error: "",
+  isVisible: false,
 };
 
 export const getPatientData = createAsyncThunk(
@@ -43,11 +45,10 @@ const patientSlice = createSlice({
   name: "patients",
   initialState,
   reducers: {
-    setPatients: (state, action: PayloadAction<Patient[]>) => {
-      state.patients = action.payload;
-      console.log("hoooo", action.payload);
-      console.log("hoooo", state.patients);
-    },
+    setTestsVisibility(state, action: PayloadAction<boolean>) {
+      console.log("action", action.payload);
+      state.isVisible = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getPatientData.pending, (state) => {

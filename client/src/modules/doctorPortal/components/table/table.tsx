@@ -19,24 +19,25 @@ const TableComponent = ({ schedules }: { schedules: any }) => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {schedules.map((row: any, rowIndex: number) => (
-          <TableRow key={rowIndex}>
-            <TableCell>{row.patientFirstName}</TableCell>
-            <TableCell>{row.time}</TableCell>
-            <TableCell key={`${rowIndex}-column4`}>
-              <div
-                onClick={() => {
-                  if (row.patientId !== undefined) {
-                    navigate(`/doctorSlots/patient/${row.patientId}`);
-                  }
-                }}
-                style={{ justifyContent: "center", display: "flex" }}
-              >
-                <PreviewIcon style={{ width: "38px", height: "38px" }} />
-              </div>
-            </TableCell>
-          </TableRow>
-        ))}
+        {schedules &&
+          schedules.map((row: any, rowIndex: number) => (
+            <TableRow key={rowIndex}>
+              <TableCell>{row.patientFirstName}</TableCell>
+              <TableCell>{row.time}</TableCell>
+              <TableCell key={`${rowIndex}-column4`}>
+                <div
+                  onClick={() => {
+                    if (row.patientId !== undefined) {
+                      navigate(`/doctorSlots/patients/${row.patientId}`);
+                    }
+                  }}
+                  style={{ justifyContent: "center", display: "flex" }}
+                >
+                  <PreviewIcon style={{ width: "38px", height: "38px" }} />
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
       </TableBody>
     </Table>
   );

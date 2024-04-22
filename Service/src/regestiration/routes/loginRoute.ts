@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import express from 'express';
 import * as loginController from '../controllers/loginController';
 const verifyToken = require('../middleWare/verifyToken');

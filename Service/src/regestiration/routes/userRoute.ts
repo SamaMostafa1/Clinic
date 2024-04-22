@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-var-requires */
 import express from 'express';
 import * as userController from '../controllers/userController';
 const verifyDoctor = require('../middleWare/verifyDoctor');

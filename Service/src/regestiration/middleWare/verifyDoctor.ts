@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 import { Request, Response, NextFunction } from 'express'; // Import NextFunction
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const prisma = new PrismaClient();
 const verifyDoctor= async (req: Request, res: Response, next: NextFunction) => {
     const user=req.user;

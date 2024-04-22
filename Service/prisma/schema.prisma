@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-userId                 Int      @id @default(autoincrement())
+  userId                 Int      @id @default(autoincrement())
   gender                 String
   firstName              String
   lastName               String
@@ -23,4 +23,15 @@ userId                 Int      @id @default(autoincrement())
   password               String
   userName               String   @unique
   doctorId               Int?
+}
+
+model EMR {
+  id           Int      @id @default(autoincrement())
+  age          Int?
+  weight       Float?
+  height       Float?
+  bloodType    String?
+  gender       String?
+  patientId    Int?
+
 }

@@ -10,11 +10,12 @@ import { useNavigate } from "react-router-dom";
 
 const SignInPage = () => {
   const errors = useSelector((state: any) => state.authReducer.error);
-  const token = useSelector((state: any) => state.authReducer.user.authToken);
+  const token = useSelector((state: any) => state.authReducer.authToken);
   const userName = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,9 +23,19 @@ const SignInPage = () => {
       userName: userName.current?.value,
       password: password.current?.value,
     };
-    dispatch<any>(login(data));
-    dispatch<any>(getData(token))
-  
+    async function fetchData() {
+      if (token) {
+        dispatch(getData(token) as any);
+      }
+    }
+    dispatch(login(data) as any).then((res: any) => {
+      if (res.payload) {
+        fetchData();
+      }
+      navigate("/doctorSlots")
+    });
+
+
   };
 
   return (

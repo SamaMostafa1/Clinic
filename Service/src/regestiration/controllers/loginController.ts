@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import hashing from '../Scripts/hashing';

@@ -16,6 +16,19 @@ CREATE TABLE "User" (
     CONSTRAINT "User_pkey" PRIMARY KEY ("userId")
 );
 
+-- CreateTable
+CREATE TABLE "EMR" (
+    "id" SERIAL NOT NULL,
+    "age" INTEGER,
+    "weight" DOUBLE PRECISION,
+    "height" DOUBLE PRECISION,
+    "bloodType" TEXT,
+    "gender" TEXT,
+    "patientId" INTEGER,
+
+    CONSTRAINT "EMR_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
