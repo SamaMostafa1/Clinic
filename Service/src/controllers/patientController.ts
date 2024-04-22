@@ -100,7 +100,29 @@ export const getPatientById = async (req: Request, res: Response) => {
     await prisma.$disconnect();
   }
 };
-
+//-------------------Get  all patients By DoctorID-----------------------
+export const getPatientByDoctorId  = async (req: Request, res: Response) => {
+  //   const getDoctorsByClinicID = async (req, res) => {
+      const {doctorId } = req.params;
+      try {
+        const parsedDoctorId = parseInt(doctorId);
+        if (isNaN(parsedDoctorId)) {
+          throw new Error('Invalid doctor ID format. Please enter an integer.');
+        }
+        const userMember = await prisma.user.findMany({
+          where: {
+            doctorId : parsedDoctorId,
+            role: "Patient",
+          },
+        });
+          res.status(200).json({ data: userMember });
+      } catch (error: any) {
+        console.error(error);
+        res.status(400).json({ error: error.message });
+      } finally {
+        await prisma.$disconnect();
+      }
+    };
 //-----------------------Delete Patient --------------------------------
 export const deletePatient = async (req: Request, res: Response) => {
   const { userId } = req.params;

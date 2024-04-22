@@ -22,5 +22,5 @@ model User {
   ssn                    String   @unique
   password               String
   userName               String   @unique
-  // clinicId               Int?
+  doctorId               Int?
  }
