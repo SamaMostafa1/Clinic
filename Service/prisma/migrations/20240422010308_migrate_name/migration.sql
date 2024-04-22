@@ -11,6 +11,7 @@ CREATE TABLE "User" (
     "ssn" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "userName" TEXT NOT NULL,
+    "doctorId" INTEGER,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("userId")
 );
