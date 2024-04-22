@@ -1,12 +1,12 @@
 
 import express from 'express';
-import staffRouter from './routes/staffRoute';
-import userRouter from './routes/userRoute';
-import patientRouter from './routes/patientRoute';
-import loginRouter from './routes/loginRoute';
+import staffRouter from './regestiration/src/routes/staffRoute';
+import userRouter from './regestiration/src/routes/userRoute';
+import patientRouter from './regestiration/src/routes/patientRoute';
+import loginRouter from './regestiration/src/routes/loginRoute';
 import cors from 'cors';
-
-const verifyToken = require('./middleWare/verifyToken');
+import emrRouter from './EMR2/src/routes/emrRouter';
+// const verifyToken = require('./middleWare/verifyToken');
 const cookieParser = require('cookie-parser');
 
 const app = express();
@@ -26,8 +26,7 @@ app.use(cors({
 }));
 
 app.use('/login', loginRouter);
-
-
+app.use('/EMR', emrRouter);
 app.use('/staff', staffRouter);
 app.use('/patient', patientRouter);
 app.use('/user',userRouter );
