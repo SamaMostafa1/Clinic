@@ -23,6 +23,14 @@ declare global {
 }
 
 const verifyJWT = async (req: Request, res: Response, next: NextFunction) => {
+
+    // const accessToken = req.cookies["access-token"];
+    // if (!accessToken)
+    //     return res.status(400).json({ error: "User not Authenticated!" });
+    
+    // if (!cookies?.jwt) return res.sendStatus(40);
+    // const token = cookies.jwt;
+
     const authHeader = req.headers['authorization'];
     if (!authHeader) return res.sendStatus(401);
     console.log(authHeader); // Bearer token
@@ -45,6 +53,36 @@ const verifyJWT = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
+// const verifyJWT = async (req: Request, res: Response, next: NextFunction) => {
+
+//     const accessToken = req.cookies["access-token"];
+//     if (!accessToken)
+//         return res.status(400).json({ error: "User not Authenticated!" });
+    
+//     // if (!cookies?.jwt) return res.sendStatus(40);
+//     // const token = cookies.jwt;
+
+//     // const authHeader = req.headers['authorization'];
+//     // if (!authHeader) return res.sendStatus(401);
+//     // console.log(authHeader); // Bearer token
+//     // const token = authHeader.split(' ')[1];
+
+//     try {
+//         const payload = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as { userId: number };
+//         const user = await prisma.user.findUnique({
+//             where: {
+//                 userId: payload.userId,
+//             },
+//         });
+//         if (!user) return res.sendStatus(401); // User not found
+//         req.user = user;
+//         console.log(req.user);
+//         next(); // Call next function
+//     } catch (error) {
+//         console.error(error);
+//         return res.sendStatus(401); // Invalid or expired token
+//     }
+// };
 
 module.exports = verifyJWT;
 

@@ -22,8 +22,16 @@ model User {
   ssn                    String   @unique
   password               String
   userName               String   @unique
-  // clinicId               Int?
-  createdAt              DateTime @default(now())
-  refreshToken           String?
+  doctorId               Int?
+}
+
+model EMR {
+  id           Int      @id @default(autoincrement())
+  age          Int?
+  weight       Float?
+  height       Float?
+  bloodType    String?
+  gender       String?
+  patientId    Int?
 
 }
