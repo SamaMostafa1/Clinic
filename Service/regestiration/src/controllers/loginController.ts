@@ -7,7 +7,16 @@ require("dotenv").config();
 const fsPromises = require('fs').promises;
 const path = require('path');
 
+import {IUser} from '../data/interface'
 const prisma = new PrismaClient();
+
+declare global {
+  namespace Express {
+      export interface Request {
+          user: Partial<IUser>
+      }
+  }
+}
 
 export const loginUser = async (req: Request, res: Response) => {
   const { userName, password } = req.body;
