@@ -9,7 +9,16 @@ require("dotenv").config();
 const fsPromises = require('fs').promises;
 const path = require('path');
 
+import {IUser} from '../data/interface'
 const prisma = new PrismaClient();
+
+declare global {
+  namespace Express {
+      export interface Request {
+          user: Partial<IUser>
+      }
+  }
+}
 
 export const loginUser = async (req: Request, res: Response) => {
   const { userName, password } = req.body;
@@ -28,6 +37,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
     // Use your existing function to compare hashed password
     await hashing.compareHashPassword(password, user.password, { error: 'Invalid credentials' });
+    
     const accessToken = jwt.sign(
       { userId: user.userId },
       process.env.ACCESS_TOKEN_SECRET,
@@ -49,7 +59,7 @@ export const loginUser = async (req: Request, res: Response) => {
 //       refreshToken: refreshToken // Provide the new value for refreshToken
 //     }
 // });
-//      res.cookie('jwt', refreshToken, { httpOnly: true,  secure: true, maxAge: 24 * 60 * 60 * 1000 });
+     res.cookie('access-token', accessToken, { httpOnly: true,  secure: true, maxAge: 24 * 60 * 60 * 1000 });
     res.status(200).json({ accessToken: accessToken});
   } catch (error) {
     console.error(error);

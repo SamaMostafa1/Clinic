@@ -12,6 +12,7 @@ datasource db {
 
 model User {
   userId                 Int      @id @default(autoincrement())
+  userId                 Int      @id @default(autoincrement())
   gender                 String
   firstName              String
   lastName               String
