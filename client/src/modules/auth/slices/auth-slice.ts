@@ -13,6 +13,12 @@ interface AuthState {
   loading: boolean;
   error: string;
   accessToken: string;
+  loggedInData: user;
+}
+
+interface user {
+  userId: string;
+  userName: string;
 }
 
 const initialState: AuthState = {
@@ -23,17 +29,21 @@ const initialState: AuthState = {
   loading: false,
   error: "",
   accessToken: "",
+  loggedInData: {
+    userId: "",
+    userName: "",
+  },
 };
 export const login = createAsyncThunk("auth/login", (data: any, thunkApi) => {
   const { rejectWithValue } = thunkApi;
   return axios
-    .post("http://localhost:3005/login", data, {
+    .post("http://localhost:10000/login", data, {
       headers: {
         "Content-Type": "application/json",
       },
     })
     .then((res) => {
-      console.log("res", res.data);
+      console.log("getToken", res.data);
       return res.data;
     })
     .catch((err) => {
@@ -42,19 +52,23 @@ export const login = createAsyncThunk("auth/login", (data: any, thunkApi) => {
     });
 });
 
-export const getData = createAsyncThunk("auth/getData", (token: string) => {
-  return axios
-    .get("http://localhost:10000/patient/doctor/1", {
-      headers: {
-        "Authorization":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiO…zIxfQ.o0LVm3YyVPRJfiBNRG9Ze8hn19r4RCYIkaXrQFwjLhg",
-      },
-    })
-    .then((res) => {
-      console.log("res", res.data);
-      return res.data;
-    });
-});
+export const loggedIn = createAsyncThunk(
+  "auth/loggedIn",
+  (token: any, thunkApi) => {
+    return axios
+      .get("http://localhost:10000/login/verify", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        return res.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+);
 
 const authSlice = createSlice({
   name: "auth",
@@ -63,6 +77,10 @@ const authSlice = createSlice({
     setFormData: (state, action) => {
       state.user = action.payload;
       console.log("hoooo", action.payload);
+    },
+    setToken: (state, action) => {
+      state.accessToken = action.payload;
+      console.log("reachhh", action.payload);
     },
   },
   extraReducers: (builder) => {
@@ -78,8 +96,10 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = action.payload as string;
     });
-    builder.addCase(getData.rejected, (state, action) => {
-      console.log(action.payload);
+    builder.addCase(loggedIn.fulfilled, (state, action) => {
+      console.log("doctor", action.payload);
+      state.loggedInData = action.payload;
+      state.loading = true;
     });
   },
 });

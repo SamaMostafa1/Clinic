@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 export default interface Slot {
   _id?: string;
@@ -56,14 +58,20 @@ export const addSlot = createAsyncThunk(
 
 export const getSlots = createAsyncThunk<Slot[], string | void>(
   "slots/getSlots",
-  async () => {
+  async (data: any) => {
     return axios
-      .get(`http://localhost:3005/slots`)
+      .get(`http://localhost:10000/patient/doctor/${data.parsedId}`, {
+        headers: {
+          Authorization: `Bearer ${data.token}`,
+        },
+      })
       .then((res) => {
+        console.log("res.data", res.data);
         return res.data;
       })
       .catch((err) => {
-        console.log(err);
+        console.log(data.token);
+        console.log("eeeeeeeeeeeee", err);
       });
   }
 );
@@ -80,10 +88,10 @@ const slotsSlice = createSlice({
       state.loading = false;
       state.slots = action.payload;
     });
-    builder.addCase(getSlots.rejected, (state, _) => {
+    builder.addCase(getSlots.rejected, (state, action) => {
+      console.log("actionnnnnnnn", action);
       state.loading = false;
     });
-    
   },
 });
 

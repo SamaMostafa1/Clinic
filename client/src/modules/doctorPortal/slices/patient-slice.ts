@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
@@ -28,11 +29,14 @@ const initialState: PatientState = {
 
 export const getPatientData = createAsyncThunk(
   "patients/getPatientData",
-  (id: number | undefined) => {
+  (data: any) => {
     return axios
-      .get(`http://localhost:3005/patients?id=${id}`)
+      .get(`http://localhost:10000/patient/${data.parsedId}`, {
+        headers: {
+          Authorization: `Bearer ${data.token}`,
+        },
+      })
       .then((res) => {
-        console.log(res.data);
         return res.data;
       })
       .catch((err) => {
@@ -46,8 +50,11 @@ const patientSlice = createSlice({
   initialState,
   reducers: {
     setTestsVisibility(state, action: PayloadAction<boolean>) {
-      console.log("action", action.payload);
+      console.log("action");
       state.isVisible = action.payload;
+    },
+    setPatientData(state, action: PayloadAction<Patient[]>) {
+      state.patients = action.payload;
     }
   },
   extraReducers: (builder) => {

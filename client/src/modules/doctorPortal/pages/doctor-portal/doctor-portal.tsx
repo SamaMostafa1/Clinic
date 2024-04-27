@@ -15,22 +15,34 @@ import { TestForm } from "../../components/form/form";
 const PatientData = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const token = useSelector((state: any) => state.authReducer.accessToken);
 
   const parsedId = id ? parseInt(id, 10) : undefined;
+  const data = {
+    parsedId,
+    token,
+  };
   useEffect(() => {
     async function fetchData() {
-      await dispatch(getPatientData(parsedId) as any);
+      await dispatch(getPatientData(data) as any).then((res: any) => {
+        console.log("resssssssss", res.payload);
+        dispatch(patientActions.setPatientData(res.payload.data) as any);
+      });
     }
     fetchData();
     console.log("parsedId", parsedId);
   }, [dispatch, parsedId]);
 
-  const patients = useSelector((state: any) => state.patientReducer.patients);
-  let v = false;
+  const patients = useSelector((state: any) => state.slotsReducer.slots.data);
+
   //const [isVisible, setTestsVisibility] = useState(() => {})
   const isVisible = useSelector((state: any) => state.patientReducer.isVisible);
-  const patientData = patients.find((patient: any) => patient.id === parsedId);
-
+  const patientData = patients.find(
+    (patient: any) => patient.userId === parsedId
+  );
+  const handleClick = () => {
+    dispatch(patientActions.setTestsVisibility(!isVisible));
+  };
   return (
     <div className={classes.pageContainer}>
       <div className={classes.flexContainer}>
@@ -53,6 +65,9 @@ const PatientData = () => {
             fontSize: "20px",
             fontFamily: "sans-serif",
           }}
+          onClick={() => {
+            handleClick();
+          }}
         >
           T<span style={{ textTransform: "lowercase" }}>ests</span>
         </Button>
@@ -65,14 +80,11 @@ const PatientData = () => {
             fontSize: "20px",
             fontFamily: "sans-serif",
           }}
-          onClick={() => {
-            v = !v;
-          }}
         >
           P<span style={{ textTransform: "lowercase" }}>rescription</span>
         </Button>
       </div>
-      <TestForm isFormVisible={true} />
+      <TestForm isFormVisible={isVisible} />
     </div>
   );
 };

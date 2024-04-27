@@ -22,13 +22,13 @@ const TableComponent = ({ schedules }: { schedules: any }) => {
         {schedules &&
           schedules.map((row: any, rowIndex: number) => (
             <TableRow key={rowIndex}>
-              <TableCell>{row.patientFirstName}</TableCell>
+              <TableCell>{row.userName}</TableCell>
               <TableCell>{row.time}</TableCell>
               <TableCell key={`${rowIndex}-column4`}>
                 <div
                   onClick={() => {
-                    if (row.patientId !== undefined) {
-                      navigate(`/doctorSlots/patients/${row.patientId}`);
+                    if (row.userId !== undefined) {
+                      navigate(`/doctorSlots/patients/${row.userId}`);
                     }
                   }}
                   style={{ justifyContent: "center", display: "flex" }}
