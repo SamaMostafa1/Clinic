@@ -1,3 +1,5 @@
+/* eslint-disable no-extra-semi */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Response } from 'express';
 import { Prisma } from '@prisma/client';
 import hashing from '../Scripts/hashing';

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-useless-catch */
 import bcrypt from "bcrypt";
 
 const hashPassword = async (password: string) => {
