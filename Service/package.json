@@ -40,5 +40,11 @@
     "url": "https://github.com/SamaMostafa1/Clinic/issues"
   },
   "homepage": "https://github.com/SamaMostafa1/Clinic#readme",
-  "description": ""
+  "description": "",
+  "eslintConfig": {
+    "rules": {
+      "@typescript-eslint/no-explicit-any": "off",
+      "no-useless-catch": "off"
+    }
+  }
 }
