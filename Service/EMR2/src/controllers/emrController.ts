@@ -6,109 +6,96 @@ const prisma = new PrismaClient();
 
 
 
-//-------------------Get  all staff User By ID-----------------------
-export const getRecordByPatientId = async (req: Request, res: Response) => {
-  const { patientId  } = req.params;
-  try {
-    const parsedpatientId = parseInt( patientId );
-    if (isNaN(parsedpatientId)) {
-      throw new Error('Invalid userId format. Must be an integer.');
-    }
-    const EMR = await prisma.EMR.findMany({
-      where: {
-        patientId: parsedpatientId,
-      }
+// Example route definition using Express.js
+
+async function createMedicalHistoryIfNotExists(patientId: number) {
+  // Check if a medical history record with the provided patient ID exists
+  const existingMedicalHistory = await prisma.medicalHistory.findUnique({
+    where: {
+      id: patientId,
+    },
+  });
+
+  // If a medical history record with the provided patient ID does not exist, create a new one
+  if (!existingMedicalHistory) {
+    await prisma.medicalHistory.create({
+      data: {
+        id: patientId, // Assign the patient ID directly to the id field
+        // Include other fields as needed
+      },
     });
-    if (EMR) {
-      res.status(200).json({ data: EMR });
-    } else {
-      res.status(404).json({ error: 'EMR not found' });
-    }
-  } catch (error: any) {
-    console.error(error);
-    res.status(400).json({ error: error.message });
-  } finally {
-    await prisma.$disconnect();
   }
-};
+}
 
+// Get Drugs by Patient ID
+export const getDrugsByPatientId= async (req: Request, res: Response) => {
+  const patientId = parseInt(req.params.id);
 
-//-------------------Create New Staff -----------------------
-export const createRecord = async (req: Request, res: Response) => {
-  const EMRData = req.body;
   try {
-      const newEMR = await prisma.EMR.create({
-        data: EMRData,
-      });
-      res.status(201).json({ data: newEMR });
-    } 
-  catch (error:any) {
-  } finally {
-    await prisma.$disconnect();
+    // Fetch drugs associated with the patient
+    const patientDrugs = await prisma.drug.findMany({
+      where: {
+        medicalHistoryId: patientId, // Assuming medicalHistoryId is used to link drugs to patients
+      }, select: {
+        name: true, // Select only the 'name' field of the drug
+      },
+    });    
+    // Extract drug names from the array of drug objects
+    res.json(patientDrugs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
-// //-------------------Update staff-----------------------
-// export const updateStaff = async (req: Request, res: Response) => {
-//   const { userId } = req.params;
-//   const userData = req.body;
-//   const parsedUserId=parseInt(userId);
-//   try { 
-//     if(isNaN(parsedUserId)){
-//       throw new Error('Data type must be integer');
-//     }
-//       const userExists = await prisma.user.findUnique({
-//         where: {
-//           userId: parsedUserId,
-//           OR: [
-//             { role: "Doctor" },
-//             { role: "Admin" }
-//           ],
-//         },
-//       });  
-//       if (!userExists) {
-//         throw new Error('User not found');
-//       }else{
 
-//         await validation.validateUsertData(userData)
-//         const updatedUser = await prisma.user.update({
-//           where: {
-//             userId: parsedUserId,
-//             OR: [
-//               { role: "Doctor" },
-//               { role: "Admin" }
-//             ],  
-//           },    
-//           data: userData,
-//         }); 
-//         res.status(200).json({ data: updatedUser });  
-//     }
-//   } catch (error:any) {
-//     validate.handleErrors(error, res);
-//   } finally {
-//     await prisma.$disconnect();
-//   }
-// };
+// Post Drugs to Patient
+export const createDrugs= async (req: Request, res: Response) => {
+  const patientId = parseInt(req.params.id);
+  const drugs= req.body;
+  console.log("drug body");
+ console.log(drugs);
+  try {
+      createMedicalHistoryIfNotExists(patientId);
+      const createdDrugs = await prisma.drug.create({
+        data: {
+          ...drugs,
+          medicalHistoryId: patientId,
+        },
+      });
 
-// //-------------------Delete Staff -----------------------
-// export const deleteStaff = async (req: Request, res: Response) => {
-//   const { userId } = req.params;
-//   try {
-//     await prisma.user.delete({
-//       where: {
-//         userId: parseInt(userId, 10),
-//         OR: [
-//           { role: "Doctor" },
-//           { role: "Admin" }
-//         ]
-//       }
-//     });
+      res.status(201).json({ data: createdDrugs});       // successsful response
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+//delete 
+export const deleteDrug = async (req: Request, res: Response) => {
+  const drugId = parseInt(req.params.id);
 
-//     res.status(204).send(); 
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   } finally {
-//     await prisma.$disconnect();
-//   }
-// };
+  try {
+    // Check if the drug exists
+    const existingDrug = await prisma.drug.findUnique({
+      where: {
+        id: drugId,
+      },
+    });
+
+    if (!existingDrug) {
+      return res.status(404).json({ error: 'Drug not found' });
+    }
+
+    // Delete the drug
+    await prisma.drug.delete({
+      where: {
+        id: drugId,
+      },
+    });
+
+    res.status(200).json({ message: 'Drug deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting drug:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 

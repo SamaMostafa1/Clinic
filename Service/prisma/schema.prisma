@@ -11,27 +11,86 @@ datasource db {
 }
 
 model User {
-  userId                 Int      @id @default(autoincrement())
-  gender                 String
-  firstName              String
-  lastName               String
-  dateOfBirth            String
-  email                  String   @unique
-  phoneNumber            String
-  role                   String
-  ssn                    String   @unique
-  password               String
-  userName               String   @unique
-  doctorId               Int?
+  userId      Int    @id @default(autoincrement())
+  gender      String
+  firstName   String
+  lastName    String
+  dateOfBirth String
+  email       String @unique
+  phoneNumber String
+  role        String
+  ssn         String @unique
+  password    String
+  userName    String @unique
+  doctorId    Int?
 }
 
-model EMR {
-  id           Int      @id @default(autoincrement())
-  age          Int?
-  weight       Float?
-  height       Float?
-  bloodType    String?
-  gender       String?
-  patientId    Int?
+// model EMR {
+//   id           Int      @id @default(autoincrement())
+//   age          Int?
+//   weight       Float?
+//   height       Float?
+//   bloodType    String?
+//   gender       String?
+//   patientId    Int?
 
+// }
+model MedicalHistory {
+  id           Int           @id
+  illnesses    Illness[]
+  operations   Operation[]
+  records      Record[]
+  medicalTests MedicalTest[]
+  drugs        Drug[]
+}
+
+model Illness {
+  id               Int            @id @default(autoincrement())
+  description      String
+  medicalHistory   MedicalHistory @relation(fields: [medicalHistoryId], references: [id])
+  medicalHistoryId Int
+}
+
+model Operation {
+  id               Int            @id @default(autoincrement())
+  name             String
+  date             DateTime
+  medicalHistory   MedicalHistory @relation(fields: [medicalHistoryId], references: [id])
+  medicalHistoryId Int
+}
+
+model MedicalTest {
+  id               Int            @id @default(autoincrement())
+  description      String
+  medicalHistory   MedicalHistory @relation(fields: [medicalHistoryId], references: [id])
+  medicalHistoryId Int
+}
+
+model Record {
+  id               Int            @id @default(autoincrement())
+  weight           Int
+  length           Int
+  date             DateTime
+  prescriptions    Prescription[]
+  medicalHistory   MedicalHistory @relation(fields: [medicalHistoryId], references: [id])
+  medicalHistoryId Int
+}
+
+model Prescription {
+  id         Int    @id @default(autoincrement())
+  doctorName String
+  diagnosis  String
+  extraNotes String
+  record     Record @relation(fields: [recordId], references: [id])
+  recordId   Int
+}
+
+model Drug {
+  id               Int            @id @default(autoincrement())
+  name             String
+  time             String
+  dose             String
+  note             String
+  medicalHistory   MedicalHistory @relation(fields: [medicalHistoryId], references: [id])
+  medicalHistoryId Int
 }
