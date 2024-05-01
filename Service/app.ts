@@ -6,6 +6,7 @@ import staffRouter from './regestiration/src/routes/staffRoute';
 import userRouter from './regestiration/src/routes/userRoute';
 import patientRouter from './regestiration/src/routes/patientRoute';
 import loginRouter from './regestiration/src/routes/loginRoute';
+import hl7Route from './regestiration/src/routes/hl7Router'
 import cors from 'cors';
 import emrRouter from './EMR2/src/routes/emrRouter';
 // const verifyToken = require('./middleWare/verifyToken');
@@ -27,6 +28,7 @@ app.use(cors({
   credentials: true,
 }));
 
+app.use('/hl7Route',hl7Route);
 app.use('/login', loginRouter);
 app.use('/EMR', emrRouter);
 app.use('/staff', staffRouter);
