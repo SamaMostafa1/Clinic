@@ -1,7 +1,6 @@
 .block {
   border-radius: 15px;
   width: 50%;
-  height: 150px;
   background: rgb(243 243 243);
   font-size: 14px;
   font-weight: 400;
@@ -25,7 +24,7 @@
 
 .block3 {
   margin-top: 10px;
-  height: 200px;
+  /* height: 200px; */
   display: flex;
   border-radius: 15px;
   margin-bottom: 1px;

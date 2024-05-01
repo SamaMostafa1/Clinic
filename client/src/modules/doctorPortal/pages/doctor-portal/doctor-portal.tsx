@@ -66,7 +66,7 @@ const PatientData = () => {
         <div className={classes.flexContainer}>
           {parsedId ? (
             <>
-              <BlockData patient={patientData} />
+              <BlockData patient={patientData} isTrue={true} />
               <HistoryData id={id} />
             </>
           ) : null}

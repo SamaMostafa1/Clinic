@@ -7,30 +7,38 @@ import styles from "./patient-portal.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { authReducer } from "../../auth/slices/auth-slice";
-import { getPatientData } from "../../doctorPortal/slices/patient-slice";
+import {
+  getDataRecord,
+  getPatientData,
+  patientActions,
+} from "../../doctorPortal/slices/patient-slice";
+
 export const PatientPortal = () => {
   const { id } = useParams();
   const parsedId = id ? parseInt(id, 10) : undefined;
   const dispatch = useDispatch();
-  const token = useSelector((state: any) => 
-    state.authReducer.accessToken
+  // const token = useSelector((state: any) => state.authReducer.accessToken);
+  const dataLogged = useSelector(
+    (state: any) => state.authReducer.loggedInData.data
+  );
+  const patientRecord = useSelector(
+    (state: any) => state.patientReducer.patients
   );
   
-  const patientData = useSelector((state: any) => 
-    state.authReducer.loggedInData
-  );
-  
-  const data = {
-    token,
-    parsedId,
-  };
-  
+  const patient = { ...dataLogged, ...patientRecord[0] };
+  console.log("paaaa", patient)
   useEffect(() => {
     const fetchData = async () => {
-      //await dispatch(getPatientData(data) as any).then((res: any) => {});
+      await dispatch(getDataRecord(parsedId) as any).then((res: any) => {
+        // dataLogged = { ...dataLogged + res.payload };
+      });
     };
     fetchData();
   }, []);
+
+  const patientData = useSelector(
+    (state: any) => state.patientReducer.patients
+  );
   return (
     <>
       <div className={styles.backgroundImage}>
@@ -46,8 +54,7 @@ export const PatientPortal = () => {
             <h2>Your Data</h2>
           </div>
           <div className={classes.flexContainer}>
-            <BlockData patient={patientData.data} />
-
+            <BlockData patient={patient} isTrue={true} />
             <HistoryData id={id} />
           </div>
           <div>

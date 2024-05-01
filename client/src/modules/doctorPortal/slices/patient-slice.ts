@@ -3,14 +3,14 @@ import axios from "axios";
 
 export interface Patient {
   id?: string;
-  gender: string;
+  gender?: string;
   name: string;
   weight: number;
-  height: number;
-  age: number;
-  bloodType: string;
-  neededTest: string[];
-  prescriptionData: object;
+  length: number;
+  age?: number;
+  bloodType?: string;
+  neededTest?: string[];
+  prescriptionData?: object;
 }
 
 interface PatientState {
@@ -50,16 +50,19 @@ export const getPatientData = createAsyncThunk(
   }
 );
 
-export const getData = createAsyncThunk("", (data: any) => {
-  return axios
-    .get(`http://localhost:10000/EMR/patient/11/drugs`)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+export const getDataRecord = createAsyncThunk(
+  "patients/getDataRecord",
+  (data: number | undefined) => {
+    return axios
+      .get(`http://localhost:10000/EMR/patient/2/record`)
+      .then((res) => {
+        return res.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+);
 const patientSlice = createSlice({
   name: "patients",
   initialState,
@@ -92,6 +95,10 @@ const patientSlice = createSlice({
     builder.addCase(getPatientData.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message as string;
+    });
+    builder.addCase(getDataRecord.fulfilled, (state, action) => {
+      state.patients.push(...action.payload);
+      console.log(action.payload);
     });
   },
 });

@@ -18,7 +18,7 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "MedicalHistory" (
-    "id" SERIAL NOT NULL,
+    "id" INTEGER NOT NULL,
 
     CONSTRAINT "MedicalHistory_pkey" PRIMARY KEY ("id")
 );
