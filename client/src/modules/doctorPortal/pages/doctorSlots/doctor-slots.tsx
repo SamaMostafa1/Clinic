@@ -31,6 +31,9 @@ const DoctorSlots = () => {
         display: "flex",
         justifyContent: "center",
         alignContent: "center",
+        backgroundColor:"",
+        background: "linear-gradient(285.17deg, #a8bebe 10.66%, #dcdcdc 102.7%)",
+        height:"100vh"
       }}
     >
       {load ? <CircularProgress /> : <TableComponent schedules={slots} />}

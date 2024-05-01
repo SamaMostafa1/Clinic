@@ -20,13 +20,16 @@ const SignInPage = () => {
   const password = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const loggedInRole = useSelector((state: any) => {
+    // state.authReducer.loggedInData.data["role"];
+  });
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const data = {
       userName: userName.current?.value,
       password: password.current?.value,
     };
+
     dispatch(login(data) as any).then((res: any) => {
       // if (res.payload) {
 
@@ -39,8 +42,11 @@ const SignInPage = () => {
       if (token) {
         console.log("tokenDispatch", res.payload.accessToken);
         dispatch(loggedIn(token) as any).then((res: any) => {
-          if (res.payload) {
-            navigate(`/doctorSlots/${res.payload.data.userId}`);
+          console.log("resssbb", res.payload.data["role"]);
+          if (res.payload.data["role"] === "Patient") {
+            navigate(`/patient/${res.payload.data["userId"]}`);
+          } else {
+             navigate(`/doctorSlots/${res.payload.data.userId}`);
           }
         });
       }

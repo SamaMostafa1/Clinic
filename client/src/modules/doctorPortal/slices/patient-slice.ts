@@ -50,6 +50,16 @@ export const getPatientData = createAsyncThunk(
   }
 );
 
+export const getData = createAsyncThunk("", (data: any) => {
+  return axios
+    .get(`http://localhost:10000/EMR/patient/11/drugs`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 const patientSlice = createSlice({
   name: "patients",
   initialState,

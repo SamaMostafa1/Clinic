@@ -12,7 +12,7 @@ function App() {
           <Route path="/" Component={SignInPage} />
           <Route path="/doctorSlots/:id" Component={DoctorSlot} />
           <Route path="/doctorSlots/patients/:id" Component={PatientData} />
-          <Route path="/Patient" Component={PatientPortal} />
+          <Route path="/patient/:id" Component={PatientPortal} />
         </Routes>
       </Router>
     </div>
