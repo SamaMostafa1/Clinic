@@ -1,0 +1,13 @@
+.divForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    border: 2px solid black;
+    background-color: white;
+    border-radius: 5px;
+}

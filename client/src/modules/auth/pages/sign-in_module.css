@@ -1,23 +1,31 @@
 /* Container */
 .sign-in-container {
-  margin-top: 200px;
   max-width: 500px;
-
   margin-left: 500px;
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 2px solid #0e0d0d;
   border-radius: 5px;
   background-color: #f9f9f9;
-  /* New styles for centering vertically */
-
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  display: flex;
+  margin-top: 150px;
 }
-
+.background{
+  width:100%;
+  height: 100vh;
+  overflow: hidden;
+  /* background-image: url("../../patientPortal/pages/istockphoto-911633218-612x612.jpg"); */
+  background: linear-gradient(285.17deg, #a8bebe 10.66%, #dcdcdc 102.7%)
+}
 /* Form Title */
 .sign-in-container h2 {
   text-align: center;
+  font-weight: 600;
+  font-size: 30px;
+  margin-bottom: 2px;
+  margin-top: 2px;
 }
 
 /* Form Field Container */
@@ -28,12 +36,13 @@
 /* Label */
 .form-field label {
   display: block;
-  font-weight: bold;
+  font-weight: 400;
+  /* font-weight: bold; */
+
 }
 
 /* Input Field */
 .form-field input {
-  width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -54,12 +63,12 @@
   margin-top: 10px;
   border: none;
   border-radius: 5px;
-  background-color: #3498db;
+  background-color: #4a6588;
   color: #fff;
   font-size: 1em;
   cursor: pointer;
 }
 
 .submit-button:hover {
-  background-color: #0056b3;
+  background-color: #4a6588;
 }
