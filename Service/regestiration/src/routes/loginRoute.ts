@@ -6,6 +6,6 @@ const verifyDoctor = require('../middleWare/verifyDoctor');
 const router = express.Router();
 
 router.post('/', loginController.loginUser );
-router.get('/verify/', [verifyToken,verifyDoctor], loginController.logedIn)
+router.get('/verify/', verifyToken, loginController.logedIn)
 
 export default router;

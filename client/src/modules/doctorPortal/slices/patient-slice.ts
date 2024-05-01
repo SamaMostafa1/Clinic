@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -11,20 +9,27 @@ export interface Patient {
   height: number;
   age: number;
   bloodType: string;
+  neededTest: string[];
+  prescriptionData: object;
 }
 
 interface PatientState {
   patients: Patient[];
   loading: boolean;
   error: string;
-  isVisible?: boolean;
+  isFormTestsVisible?: boolean;
+  isPrescriptionVisible?: boolean;
+  neededTest: string[];
+  prescriptionData: object;
 }
 
 const initialState: PatientState = {
   patients: [],
   loading: false,
   error: "",
-  isVisible: false,
+  isFormTestsVisible: false,
+  neededTest: [],
+  prescriptionData: {},
 };
 
 export const getPatientData = createAsyncThunk(
@@ -45,17 +50,36 @@ export const getPatientData = createAsyncThunk(
   }
 );
 
+export const getData = createAsyncThunk("", (data: any) => {
+  return axios
+    .get(`http://localhost:10000/EMR/patient/11/drugs`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 const patientSlice = createSlice({
   name: "patients",
   initialState,
   reducers: {
     setTestsVisibility(state, action: PayloadAction<boolean>) {
       console.log("action");
-      state.isVisible = action.payload;
+      state.isFormTestsVisible = action.payload;
+    },
+    setFormPrescrition(state, action: PayloadAction<boolean>) {
+      state.isPrescriptionVisible = action.payload;
     },
     setPatientData(state, action: PayloadAction<Patient[]>) {
       state.patients = action.payload;
-    }
+    },
+    setNeededTests(state, action: PayloadAction<string[]>) {
+      state.neededTest = action.payload;
+    },
+    setPrescriptionData(state, action: PayloadAction<object>) {
+      state.prescriptionData = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getPatientData.pending, (state) => {

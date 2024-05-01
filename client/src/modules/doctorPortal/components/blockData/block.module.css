@@ -1,15 +1,22 @@
 .block {
   border-radius: 15px;
   width: 50%;
-  background: linear-gradient(131.75deg, #01b6b6 2.18%, #13dec3 100%);
+  height: 150px;
+  background: rgb(243 243 243);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 38px;
   letter-spacing: 0em;
-  -webkit-text-fill-color: #ffffff;
   padding-left: 20px;
   padding-bottom: 20px;
   margin-right: 10px;
+  border: 2px solid black;
+  -webkit-text-fill-color: black;
+}
+
+.header{
+  font-size: 25px;
+  font-weight: 500;
 }
 
 .block-no-margin {
@@ -20,18 +27,16 @@
   margin-top: 10px;
   height: 200px;
   display: flex;
-  align-items: center;
   border-radius: 15px;
   margin-bottom: 1px;
   padding-bottom: 20px;
-  background: #ffffff;
-  border: 1px solid #13d2de;
-  font-family: Roboto;
+  background: rgb(243 243 243);
+  padding: 20px;
+  -webkit-text-fill-color: black;
+  border: 2px solid black;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 38px;
   letter-spacing: 0em;
-  text-align: center;
-  -webkit-text-fill-color: #ffffff;
   flex-direction: column;
 }

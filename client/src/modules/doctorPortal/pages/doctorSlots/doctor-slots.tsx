@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useDispatch, useSelector } from "react-redux";
 import TableComponent from "../../components/table/table";
 import { getSlots } from "../../slices/doctor-slots-slice";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
 
 const DoctorSlots = () => {
   const { id } = useParams();
@@ -17,6 +16,8 @@ const DoctorSlots = () => {
     parsedId,
     token,
   };
+  const load = useSelector((state: any) => state.slotsReducer.loading);
+
   useEffect(() => {
     const fetchData = async () => {
       console.log("tokennnnn", token);
@@ -24,7 +25,20 @@ const DoctorSlots = () => {
     };
     fetchData();
   }, []);
-  return <TableComponent schedules={slots} />;
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignContent: "center",
+        backgroundColor:"",
+        background: "linear-gradient(285.17deg, #a8bebe 10.66%, #dcdcdc 102.7%)",
+        height:"100vh"
+      }}
+    >
+      {load ? <CircularProgress /> : <TableComponent schedules={slots} />}
+    </div>
+  );
 };
 
 export default DoctorSlots;

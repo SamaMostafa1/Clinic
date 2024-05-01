@@ -4,7 +4,7 @@ import classes from "../blockData/block.module.css";
 export const HistoryData = ({ id }: { id: string | undefined }) => {
   return (
     <div className={`${classes.block} ${classes["block-no-margin"]}`}>
-      <h2>History Data</h2>
+      <h2 className={classes.header}>History Data</h2>
       <h2>{id}</h2>
     </div>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { Prisma } from '@prisma/client';
 import { error } from 'console';
 import { Request, Response } from 'express';

@@ -6,40 +6,70 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import PreviewIcon from "@mui/icons-material/Preview";
 import { useNavigate } from "react-router-dom";
-
+import styles from "./table.module.css";
+import classes from "../../../patientPortal/pages/patient-portal.module.css";
 const TableComponent = ({ schedules }: { schedules: any }) => {
   const navigate = useNavigate();
   return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Name</TableCell>
-          <TableCell>Time</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {schedules &&
-          schedules.map((row: any, rowIndex: number) => (
-            <TableRow key={rowIndex}>
-              <TableCell>{row.userName}</TableCell>
-              <TableCell>{row.time}</TableCell>
-              <TableCell key={`${rowIndex}-column4`}>
-                <div
-                  onClick={() => {
-                    if (row.userId !== undefined) {
-                      navigate(`/doctorSlots/patients/${row.userId}`);
-                    }
-                  }}
-                  style={{ justifyContent: "center", display: "flex" }}
-                >
-                  <PreviewIcon style={{ width: "38px", height: "38px" }} />
-                </div>
+    <div className={classes.backgroundImage} style={{ width: "100%" }}>
+      <div className={styles.pageContainer}>
+        <Table sx={{ border: "2px solid", borderRadius: "15px" }}>
+          <TableHead>
+            <TableRow>
+              <TableCell
+                sx={{
+                  backgroundColor: "#4a6588",
+                  fontSize: "25px",
+                  fontWeight: "500",
+                  color: "white",
+                }}
+              >
+                Name
               </TableCell>
+              <TableCell
+                sx={{
+                  backgroundColor: "#4a6588",
+                  fontSize: "25px",
+                  fontWeight: "500",
+                  color: "white",
+                }}
+              >
+                Time
+              </TableCell>
+              <TableCell sx={{ backgroundColor: "#4a6588" }}></TableCell>
             </TableRow>
-          ))}
-      </TableBody>
-    </Table>
+          </TableHead>
+          <TableBody>
+            {schedules &&
+              schedules.map((row: any, rowIndex: number) => (
+                <TableRow
+                  key={rowIndex}
+                  sx={{
+                    backgroundColor: rowIndex % 2 === 0 ? "white" : "#ebebeb",
+                  }}
+                >
+                  <TableCell
+                    sx={{ fontSize: "18px" }}
+                  >{`${row.firstName} ${row.lastName}`}</TableCell>
+                  <TableCell>{row.time}</TableCell>
+                  <TableCell key={`${rowIndex}-column3`}>
+                    <div
+                      onClick={() => {
+                        if (row.userId !== undefined) {
+                          navigate(`/doctorSlots/patients/${row.userId}`);
+                        }
+                      }}
+                      style={{ justifyContent: "center", display: "flex" }}
+                    >
+                      <PreviewIcon style={{ width: "38px", height: "38px" }} />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   );
 };
 

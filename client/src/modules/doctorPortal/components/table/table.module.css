@@ -1,0 +1,7 @@
+.pageContainer {
+  width: 90%;
+  height: 100vh;
+  margin: auto;
+  overflow: hidden;
+  border-radius: 15px;
+}
