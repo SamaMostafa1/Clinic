@@ -8,6 +8,64 @@ const prisma = new PrismaClient();
 
 //================================================drugs===============================================
 
+
+export const getMedicalHistoryByPatientId = async (req: Request, res: Response) => {
+  const patientId = parseInt(req.params.id);
+
+  try {
+    // Find the medical history with the specified patient ID
+    const medicalHistory = await prisma.medicalHistory.findUnique({
+      where: {
+        id: patientId,
+      },
+      include: {
+        illnesses:{
+          select: {
+            description: true,
+          },
+        },
+        operations: {
+          select:{
+            name:true,
+          }
+        },
+        records: {
+          select:{
+            weight:true,
+            length:true,
+          }
+        },
+        medicalTests: {
+          select: {
+            description: true,
+          },
+        },
+        drugs:{
+          select:{
+            name:true,
+            time:true,
+            dose:true,         
+            note:true,            
+          }
+        },
+      },
+    });
+   
+    console.log(medicalHistory.illnesses[0]);
+    // If medical history is not found, return 404
+    if (!medicalHistory) {
+      return res.status(404).json({ error: 'Medical history not found for the given patient ID' });
+    }
+
+    // If found, return the medical history
+    res.json(medicalHistory);
+  } catch (error) {
+    console.error('Error fetching medical history:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
 export const getDrugsByPatientId= async (req: Request, res: Response) => {
   const patientId = parseInt(req.params.id);
 
@@ -78,6 +136,7 @@ export const createRecord = async (req: Request, res: Response) => {
   const patientId = parseInt(req.params.id);
   try {
     const record= req.body;
+    await createMedicalHistoryIfNotExists(patientId);
     const newRecord = await prisma.record.create({
       data: {
         ...record,
@@ -137,6 +196,7 @@ export const createMedicalTest = async (req: Request, res: Response) => {
   try {
     const data = req.body;
     console.log(data);
+    await createMedicalHistoryIfNotExists(patientId);
     const newMedicalTest = await prisma.medicalTest.create({
       data: {
         ...data,
@@ -194,7 +254,7 @@ export const createOperation = async (req: Request, res: Response) => {
 
   try {
     const data = req.body;
-
+    await createMedicalHistoryIfNotExists(patientId);
     const newOperation = await prisma.operation.create({
       data: {
        ...data,
@@ -248,10 +308,11 @@ export const deleteOperationById = async (req: Request, res: Response) => {
 //=======================================illness==========================================================
 export const createIllness = async (req: Request, res: Response) => {
   const patientId = parseInt(req.params.id);
+  const data = req.body;
+  console.log(req.body);
   try {
-    const data = req.body;
-
-    const newIllness = await prisma.illness.create({
+    await createMedicalHistoryIfNotExists(patientId);
+    const newIllness = await prisma.Illness.create({
       data: {
         ...data,
         medicalHistoryId:patientId,

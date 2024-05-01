@@ -31,6 +31,8 @@ router.post('/patient/:id/illness',emrController.createIllness);
 router.get('/patient/:id/illness',emrController.getIllnessByPatientId);
 router.delete('/patient/:id/illness/:id',emrController.deleteIllnessById);
 
+router.get('/patient/:id/medicalHistory',emrController.getMedicalHistoryByPatientId);
+
 //router.post('/',[verifyToken,verifyDoctor], emrController.createRecord);
 
 export default router;
