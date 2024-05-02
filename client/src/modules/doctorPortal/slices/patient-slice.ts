@@ -11,7 +11,6 @@ export interface Patient {
   bloodType?: string;
   neededTest?: string[];
   prescriptionData?: object;
-  text: object;
 }
 
 interface PatientState {
@@ -23,6 +22,7 @@ interface PatientState {
   neededTest: string[];
   prescriptionData: object;
   text: object;
+  patientDoctorData: Array<object>
 }
 
 const initialState: PatientState = {
@@ -33,6 +33,7 @@ const initialState: PatientState = {
   neededTest: [],
   prescriptionData: {},
   text: {},
+  patientDoctorData:[{}]
 };
 
 export const getPatientData = createAsyncThunk(
@@ -111,9 +112,12 @@ export const getPatientHistory = createAsyncThunk(
       const response = await axios.get(
         `http://localhost:10000/hl7Route/${data.parsedId}`
       );
-
-      console.log("daaaaaaaa", response.data);
-      return response.data;
+      const enhancedResponse = {
+        ...response.data,
+        id: data.parsedId, // Add your additional data here
+      };
+      console.log("daaaaaaaa", enhancedResponse);
+      return enhancedResponse;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -175,8 +179,8 @@ const patientSlice = createSlice({
     });
     builder.addCase(getPatientHistory.fulfilled, (state, action) => {
       state.loading = false;
-      console.log("gggggggggggggg", action.payload.data);
-      state.patients.push(...state.patients, action.payload.data);
+      console.log("gggggggggggggg", action.payload);
+      state.patientDoctorData.push(...state.patientDoctorData, action.payload);
     });
   },
 });

@@ -47,13 +47,17 @@ const PatientData = () => {
   }, [dispatch, parsedId]);
 
   const patients = useSelector((state: any) => state.slotsReducer.slots.data);
-  const patientHistory = useSelector(
-    (state: any) => state.patientReducer.patients[0]
+  const patientHistoryData = useSelector(
+    (state: any) => state.patientReducer.patientDoctorData
   );
-  const patientDiagnosis = useSelector(
-    (state: any) => state.patientReducer.patients[0]
+  const patientDiagnosisData = useSelector(
+    (state: any) => state.patientReducer.patientDoctorData
   );
+  const patientHistory = patientHistoryData.find((item: any) => item.id === parsedId);
+  const patientDiagnosis = patientDiagnosisData.find(
+    (item: any) => item.id === parsedId
 
+  );
   //const [isVisible, setTestsVisibility] = useState(() => {})
   const isFormTestsVisible = useSelector(
     (state: any) => state.patientReducer.isFormTestsVisible

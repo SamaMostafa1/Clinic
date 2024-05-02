@@ -14,9 +14,9 @@ export const HistoryData = ({
   );
   let dataArray = [];
   if (loggedUser.role === "Patient") {
-    dataArray = Object.values(data);
+    dataArray = Object.values(data.illnesses);
   } else {
-    dataArray = data?.diagnosis;
+    dataArray = data?.data.diagnosis;
     console.log(dataArray);
   }
 
@@ -41,7 +41,7 @@ export const HistoryData = ({
                     key={index}
                     style={{ color: "black", margin: "0px", padding: "0px" }}
                   >
-                    {item}
+                    {loggedUser.role === "Patient" ? item.description : item}
                   </li>
                 ))}
               </ul>

@@ -26,12 +26,17 @@ export const PatientPortal = () => {
     (state: any) => state.patientReducer.patients
   );
 
-  const records = patientRecord[0]?.records[0];
-  const patient = { ...dataLogged, ...records };
-  const history = patientRecord[0]?.illnesses;
+  // const records = patientRecord[0]?.records[0];
 
-  const historyData = { ...history };
-  console.log("paaaggggga", historyData);
+  const patient = { ...patientRecord};
+  console.log("pppppp", patient);
+  const patientHistory = Object.values(patient).find(
+    (item: any) => item.id === parsedId
+  );
+  // // const history = patientRecord[0]?.illnesses;
+  // const history = (patientHistory as { illnesses: any })?.illnesses;
+  // const historyData = { ...history };
+  console.log("paaaggggga", patientHistory);
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(getDataRecord(parsedId) as any).then((res: any) => {
@@ -58,11 +63,11 @@ export const PatientPortal = () => {
           >
             <h2>Your Data</h2>
           </div>
-          {historyData[0] ? (
+          {patientHistory ? (
             <div style={{ height: "100vh" }}>
               <div className={classes.flexContainer}>
-                <BlockData patient={patient} isTrue={true} />
-                <HistoryData id={id} data={historyData} />
+                <BlockData patient={dataLogged} isTrue={true} />
+                <HistoryData id={id} data={patientHistory} />
               </div>
               <div>
                 <DiagnosisData id={parsedId} />
