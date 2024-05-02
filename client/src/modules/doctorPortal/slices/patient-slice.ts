@@ -11,6 +11,7 @@ export interface Patient {
   bloodType?: string;
   neededTest?: string[];
   prescriptionData?: object;
+  text: string;
 }
 
 interface PatientState {
@@ -21,6 +22,7 @@ interface PatientState {
   isPrescriptionVisible?: boolean;
   neededTest: string[];
   prescriptionData: object;
+  text: string;
 }
 
 const initialState: PatientState = {
@@ -30,6 +32,7 @@ const initialState: PatientState = {
   isFormTestsVisible: false,
   neededTest: [],
   prescriptionData: {},
+  text: "",
 };
 
 export const getPatientData = createAsyncThunk(
@@ -63,6 +66,27 @@ export const getDataRecord = createAsyncThunk(
       });
   }
 );
+
+export const postText = createAsyncThunk(
+  "patients/postText",
+  async (requestData: string, thunkAPI) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:10000/hl7Route/",
+        requestData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("daaaaaaaa", response.data);
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
 const patientSlice = createSlice({
   name: "patients",
   initialState,
@@ -83,6 +107,9 @@ const patientSlice = createSlice({
     setPrescriptionData(state, action: PayloadAction<object>) {
       state.prescriptionData = action.payload;
     },
+    setText(state, action: PayloadAction<string>) {
+      state.text = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getPatientData.pending, (state) => {
@@ -98,7 +125,7 @@ const patientSlice = createSlice({
     });
     builder.addCase(getDataRecord.fulfilled, (state, action) => {
       state.patients.push(action.payload);
-      console.log("recordddd",action.payload);
+      console.log("recordddd", action.payload);
     });
   },
 });
