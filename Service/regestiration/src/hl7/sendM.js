@@ -1,33 +1,64 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
 var hl7 = require('simple-hl7');
- function sendM(message) {
- //server connnection
-var client = hl7.Server.createTcpClient({
-  // host: '45.247.27.11',
-  host: '127.0.0.1',
-  port: 3888,
-  keepalive: true,
-  callback: function(err, ACK) {
-    if (err) {
-      console.log("*******ERROR********");
-      console.log(err.message);
-    } else {
-      console.log(ACK.log());
-      // if(data=="hiClient"){
-        // client.send(msg);
-      // }
-    }
-  }
-});
+async function sendM(message) {
+  var data = {};
+  
+  // Create a Promise to handle the asynchronous operation
+  return new Promise((resolve, reject) => {
+    // Server connection
+    var client = hl7.Server.createTcpClient({
+      host: '127.0.0.1',
+      port: 3888,
+      keepalive: true,
+      callback: async function(err, ACK) {
+        if (err) {
+          console.log("*******ERROR********");
+          console.log(err.message);
+          reject(err); // Reject the Promise with the error
+        } else {
+          console.log(ACK.log() + "========= " );
+          var diagnosis = [] ;
 
-var msg = message
+          ACK.segments.forEach(segment =>  {
+            console.log(segment.name);
+            if (segment.name === 'DG1') {
+              const description = segment.getComponent(4, 1);
+              diagnosis.push(description);
+              console.log("segmentttttt" , diagnosis)
+            }
+          });
+          // Update the data object with the received information
+          data = {
+            "firstName": ACK.getSegment('PID').getComponent(5, 2),
+            "lastName": ACK.getSegment('PID').getComponent(5, 1),
+            "diagnosis": diagnosis
 
-console.log("message to be sent:   ",msg.log());
-console.log('************sending 1 message****************');
+            
+          };
+          
 
-// client.send("Hi");
-client.send(msg);
+          // Log the received data
+          console.log("First Name:", data.firstName);
+          console.log("Last Name:", data.lastName);
+          console.log("Diagnosis:", data.diagnosis);
+
+          // Log the received data
+          console.log(data.firstName + "     " + data.lastName);
+
+          resolve(data);
+        }
+      }
+    });
+
+    var msg = message;
+
+    console.log("message to be sent:   ", msg.log());
+    console.log('************sending 1 message****************');
+
+    // Send the message
+    client.send(msg);
+  });
 }
 
 module.exports = sendM;
