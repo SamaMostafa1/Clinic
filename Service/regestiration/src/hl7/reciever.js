@@ -18,6 +18,7 @@ app.use(function(req, res, next) {
     };
     sendData(data);
     console.log("ADTT END")
+    res.end();
   } else if (req.event == "A19" && req.type == "QRY"){
 
     const patientId = req.msg.getSegment('QRD').getComponent(8, 1);
@@ -69,7 +70,7 @@ async function getPatientData(patientId, msg,res) {
         }
       });
       console.log(diagnosis.description)
-  msg.header.setField(8, ["ADR", "A19"])
+  msg.header.setField(7, ["ADR", "A19"])
 
   msg.addSegment("PID",
   "", //Blank field
@@ -99,7 +100,7 @@ async function getPatientData(patientId, msg,res) {
       "", //Date & Time
     );
   });
-
+  // MSH|^~\&|||||||QRY^A19
   // console.log("line")
   // msg.addSegment("DG1",
   // "", //Blank field
