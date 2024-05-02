@@ -4,6 +4,8 @@ import { getSlots } from "../../slices/doctor-slots-slice";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
+import classes from "../doctor-portal/doctor-portal.module.css";
+import styles from "../../../patientPortal/pages/patient-portal.module.css";
 
 const DoctorSlots = () => {
   const { id } = useParams();
@@ -26,17 +28,34 @@ const DoctorSlots = () => {
     fetchData();
   }, []);
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignContent: "center",
-        backgroundColor:"",
-        background: "linear-gradient(285.17deg, #a8bebe 10.66%, #dcdcdc 102.7%)",
-        height:"100vh"
-      }}
-    >
-      {load ? <CircularProgress /> : <TableComponent schedules={slots} />}
+    <div className={styles.backgroundImage}>
+      <div className={classes.pageContainer}>
+        <div
+          style={{
+            justifyContent: "center",
+            display: "flex",
+            flexDirection:"column",
+            fontSize: "24px",
+            color: "white",
+          }}
+        >
+          <h2>Your Slots</h2>
+          {load ?
+           <div
+           style={{
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "center",
+            backgroundColor: "",
+            background:
+              "linear-gradient(285.17deg, #a8bebe 10.66%, #dcdcdc 102.7%)",
+            height: "100vh",
+           }}>
+           <CircularProgress />
+           </div>
+            : <TableComponent schedules={slots} />}
+        </div>
+      </div>
     </div>
   );
 };

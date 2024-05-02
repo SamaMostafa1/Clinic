@@ -7,30 +7,43 @@ import styles from "./patient-portal.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { authReducer } from "../../auth/slices/auth-slice";
-import { getPatientData } from "../../doctorPortal/slices/patient-slice";
+import {
+  getDataRecord,
+  getPatientData,
+  patientActions,
+} from "../../doctorPortal/slices/patient-slice";
+import { CircularProgress } from "@mui/material";
+
 export const PatientPortal = () => {
   const { id } = useParams();
   const parsedId = id ? parseInt(id, 10) : undefined;
   const dispatch = useDispatch();
-  const token = useSelector((state: any) => 
-    state.authReducer.accessToken
+  // const token = useSelector((state: any) => state.authReducer.accessToken);
+  const dataLogged = useSelector(
+    (state: any) => state.authReducer.loggedInData.data
   );
-  
-  const patientData = useSelector((state: any) => 
-    state.authReducer.loggedInData
+  const patientRecord = useSelector(
+    (state: any) => state.patientReducer.patients
   );
-  
-  const data = {
-    token,
-    parsedId,
-  };
-  
+
+  const records = patientRecord[0]?.records[0];
+  const patient = { ...dataLogged, ...records };
+  const history = patientRecord[0]?.illnesses;
+
+  const historyData = { ...history };
+  console.log("paaaggggga", historyData);
   useEffect(() => {
     const fetchData = async () => {
-      //await dispatch(getPatientData(data) as any).then((res: any) => {});
+      await dispatch(getDataRecord(parsedId) as any).then((res: any) => {
+        // dataLogged = { ...dataLogged + res.payload };
+      });
     };
     fetchData();
   }, []);
+
+  const patientData = useSelector(
+    (state: any) => state.patientReducer.patients
+  );
   return (
     <>
       <div className={styles.backgroundImage}>
@@ -45,14 +58,31 @@ export const PatientPortal = () => {
           >
             <h2>Your Data</h2>
           </div>
-          <div className={classes.flexContainer}>
-            <BlockData patient={patientData.data} />
-
-            <HistoryData id={id} />
-          </div>
-          <div>
-            <DiagnosisData id="" />
-          </div>
+          {patient.weight ? (
+            <>
+              <div className={classes.flexContainer}>
+                <BlockData patient={patient} isTrue={true} />
+                <HistoryData id={id} data={historyData} />
+              </div>
+              <div>
+                <DiagnosisData id="" />
+              </div>
+            </>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignContent: "center",
+                backgroundColor: "",
+                background:
+                  "linear-gradient(285.17deg, #a8bebe 10.66%, #dcdcdc 102.7%)",
+                height: "100vh",
+              }}
+            >
+              <CircularProgress />
+            </div>
+          )}
         </div>
       </div>
     </>

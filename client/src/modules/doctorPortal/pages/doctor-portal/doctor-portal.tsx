@@ -14,6 +14,7 @@ import { patientReducer } from "../../slices/patient-slice";
 import { TestForm } from "../../components/form/form";
 import { PrescriptionForm } from "../../components/prescriptionForm/prescriptionForm";
 import styles from "../../../patientPortal/pages/patient-portal.module.css";
+
 const PatientData = () => {
   const dispatch = useDispatch();
   const formTest = 1;
@@ -63,11 +64,24 @@ const PatientData = () => {
   return (
     <div className={styles.backgroundImage}>
       <div className={classes.pageContainer}>
+        <h2
+          style={{
+            color: "white",
+            margin: "auto",
+            marginTop: "20px",
+            marginBottom: "20px",
+            fontSize: "30px",
+            fontWeight: "500",
+          }}
+        >
+          {" "}
+          Patient's Data
+        </h2>
         <div className={classes.flexContainer}>
           {parsedId ? (
             <>
-              <BlockData patient={patientData} />
-              <HistoryData id={id} />
+              <BlockData patient={patientData} isTrue={true} />
+              <HistoryData id={id} data={""} />
             </>
           ) : null}
         </div>
