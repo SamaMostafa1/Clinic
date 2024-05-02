@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-var-requires */
 var hl7 = require('simple-hl7');
 async function sendM(message) {
   var data = {};
@@ -6,7 +8,7 @@ async function sendM(message) {
   return new Promise((resolve, reject) => {
     // Server connection
     var client = hl7.Server.createTcpClient({
-      host: '127.0.0.1',
+      host: '45.247.123.161',
       port: 3888,
       keepalive: true,
       callback: async function(err, ACK) {
@@ -16,6 +18,9 @@ async function sendM(message) {
           reject(err); // Reject the Promise with the error
         } else {
           console.log(ACK.log() + "========= " );
+          console.log("sssssssss",ACK.header.getComponent(7, 1).toString())
+          console.log("sssssssssaaaaaa")
+          if(ACK.header.getComponent(7, 1).toString()== "ADR"){
           var diagnosis = [] ;
 
           ACK.segments.forEach(segment =>  {
@@ -35,7 +40,6 @@ async function sendM(message) {
             
           };
           
-
           // Log the received data
           console.log("First Name:", data.firstName);
           console.log("Last Name:", data.lastName);
@@ -45,6 +49,7 @@ async function sendM(message) {
           console.log(data.firstName + "     " + data.lastName);
 
           resolve(data);
+        }
         }
       }
     });

@@ -7,8 +7,8 @@ import { HistoryData } from "../../components/historyData/history-data";
 import { DiagnosisData } from "../../components/diagnosisData/diagnosisData";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getPatientData } from "../../slices/patient-slice";
-import { Button } from "@mui/material";
+import { getPatientData, getPatientHistory } from "../../slices/patient-slice";
+import { Button, CircularProgress } from "@mui/material";
 import { patientActions } from "../../slices/patient-slice";
 import { patientReducer } from "../../slices/patient-slice";
 import { TestForm } from "../../components/form/form";
@@ -25,24 +25,34 @@ const PatientData = () => {
   const prescriptionData = useSelector(
     (state: any) => state.patientReducer.prescriptionData
   );
+  const load = useSelector((state: any) => state.patientReducer.loading);
 
   const parsedId = id ? parseInt(id, 10) : undefined;
   const data = {
     parsedId,
     token,
   };
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     await dispatch(getPatientData(data) as any).then((res: any) => {
+  //       console.log("resssssssss", res.payload);
+  //       dispatch(patientActions.setPatientData(res.payload.data) as any);
+  //     });
+  //   }
+  //   fetchData();
+  //   console.log("parsedId", parsedId);
+  // }, [dispatch, parsedId]);
   useEffect(() => {
-    async function fetchData() {
-      await dispatch(getPatientData(data) as any).then((res: any) => {
-        console.log("resssssssss", res.payload);
-        dispatch(patientActions.setPatientData(res.payload.data) as any);
-      });
-    }
-    fetchData();
-    console.log("parsedId", parsedId);
+    dispatch(getPatientHistory(data) as any);
   }, [dispatch, parsedId]);
 
   const patients = useSelector((state: any) => state.slotsReducer.slots.data);
+  const patientHistory = useSelector(
+    (state: any) => state.patientReducer.patients[0]
+  );
+  const patientDiagnosis = useSelector(
+    (state: any) => state.patientReducer.patients[0]
+  );
 
   //const [isVisible, setTestsVisibility] = useState(() => {})
   const isFormTestsVisible = useSelector(
@@ -51,9 +61,10 @@ const PatientData = () => {
   const isPrescriptionVisible = useSelector(
     (state: any) => state.patientReducer.isPrescriptionVisible
   );
-  const patientData = patients.find(
-    (patient: any) => patient.userId === parsedId
-  );
+  // const patientData = patients.find(
+  //   (patient: any) => patient.userId === parsedId
+  // );
+
   const handleClick = (form: number) => {
     if (form === formTest)
       dispatch(patientActions.setTestsVisibility(!isFormTestsVisible));
@@ -70,7 +81,7 @@ const PatientData = () => {
             margin: "auto",
             marginTop: "20px",
             marginBottom: "20px",
-            fontSize: "30px",
+            fontSize: "40px",
             fontWeight: "500",
           }}
         >
@@ -78,14 +89,26 @@ const PatientData = () => {
           Patient's Data
         </h2>
         <div className={classes.flexContainer}>
-          {parsedId ? (
+          {!load ? (
             <>
-              <BlockData patient={patientData} isTrue={true} />
-              <HistoryData id={id} data={""} />
+              <BlockData patient={patientHistory} isTrue={true} />
+              <HistoryData id={id} data={patientDiagnosis} />
             </>
-          ) : null}
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignContent: "center",
+                height: "100vh",
+                margin: "auto",
+              }}
+            >
+              <CircularProgress />
+            </div>
+          )}
         </div>
-        <div>{parsedId ? <DiagnosisData id={id} /> : null}</div>
+        <div>{!load ? <DiagnosisData id={parsedId} /> : null}</div>
         <div className={classes.flexContainer}>
           <div
             style={{ display: "flex", flexDirection: "column", width: "50%" }}

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 export interface Patient {
   id?: string;
@@ -11,7 +11,7 @@ export interface Patient {
   bloodType?: string;
   neededTest?: string[];
   prescriptionData?: object;
-  text: string;
+  text: object;
 }
 
 interface PatientState {
@@ -22,7 +22,7 @@ interface PatientState {
   isPrescriptionVisible?: boolean;
   neededTest: string[];
   prescriptionData: object;
-  text: string;
+  text: object;
 }
 
 const initialState: PatientState = {
@@ -32,7 +32,7 @@ const initialState: PatientState = {
   isFormTestsVisible: false,
   neededTest: [],
   prescriptionData: {},
-  text: "",
+  text: {},
 };
 
 export const getPatientData = createAsyncThunk(
@@ -57,7 +57,7 @@ export const getDataRecord = createAsyncThunk(
   "patients/getDataRecord",
   (data: number | undefined) => {
     return axios
-      .get(`http://localhost:10000/EMR/patient/2/medicalHistory`)
+      .get(`http://localhost:10000/EMR/patient/${data}/medicalHistory`)
       .then((res) => {
         return res.data;
       })
@@ -69,7 +69,7 @@ export const getDataRecord = createAsyncThunk(
 
 export const postText = createAsyncThunk(
   "patients/postText",
-  async (requestData: string, thunkAPI) => {
+  async (requestData: object, thunkAPI) => {
     try {
       const response = await axios.post(
         "http://localhost:10000/hl7Route/",
@@ -87,6 +87,39 @@ export const postText = createAsyncThunk(
     }
   }
 );
+
+// export const getPatientHistory = createAsyncThunk(
+//   "patients/getPatientHistory",
+//   async (data: object, thunkAPI) => {
+//     try {
+//       const response = await axios.get(
+//         "http://localhost:10000/hl7Route/",
+//         data,
+//       );
+//       console.log("daaaaaaaa", response.data);
+//       return response.data;
+//     } catch (error: any) {
+//       return thunkAPI.rejectWithValue(error.response.data);
+//     }
+//   }
+// );
+
+export const getPatientHistory = createAsyncThunk(
+  "patients/getPatientHistory",
+  async (data: any, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:10000/hl7Route/${data.parsedId}`
+      );
+
+      console.log("daaaaaaaa", response.data);
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const patientSlice = createSlice({
   name: "patients",
   initialState,
@@ -107,7 +140,7 @@ const patientSlice = createSlice({
     setPrescriptionData(state, action: PayloadAction<object>) {
       state.prescriptionData = action.payload;
     },
-    setText(state, action: PayloadAction<string>) {
+    setText(state, action: PayloadAction<object>) {
       state.text = action.payload;
     },
   },
@@ -123,9 +156,27 @@ const patientSlice = createSlice({
       state.loading = false;
       state.error = action.error.message as string;
     });
+    builder.addCase(getDataRecord.pending, (state) => {
+      state.loading = true;
+    });
     builder.addCase(getDataRecord.fulfilled, (state, action) => {
       state.patients.push(action.payload);
+      state.loading = false;
       console.log("recordddd", action.payload);
+    });
+    builder.addCase(postText.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(postText.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(getPatientHistory.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(getPatientHistory.fulfilled, (state, action) => {
+      state.loading = false;
+      console.log("gggggggggggggg", action.payload.data);
+      state.patients.push(...state.patients, action.payload.data);
     });
   },
 });

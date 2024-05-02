@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const hl7 = require('simple-hl7');
 var app = hl7.tcp();
 const { PrismaClient } = require('@prisma/client');
