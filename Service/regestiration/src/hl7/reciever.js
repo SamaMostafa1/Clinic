@@ -1,9 +1,12 @@
 const hl7 = require('simple-hl7');
 var app = hl7.tcp();
+const { PrismaClient } = require('@prisma/client');
+const message = require('simple-hl7/lib/hl7/message');
+const prisma = new PrismaClient();
 
 app.use(function(req, res, next) {
 
-  console.log('Message:\n ' +   "\n" + req.msg.log());
+  console.log('Message:\n ' + req.msg.log());
   
   if (req.event == "A08" && req.type == "ADT"){
     console.log("ADTTTT");
@@ -16,30 +19,15 @@ app.use(function(req, res, next) {
     sendData(data);
     console.log("ADTT END")
   } else if (req.event == "A19" && req.type == "QRY"){
-    const patientId = req.msg.getSegment('PID').getComponent(2, 4);
-    // patient = {
-    //   "data": 2
-    // }
-    // const msg = createMessageData(["ADT","A08"],patient)
-    console.log("sent " + msg.log());
-    app.send(msg);
-    console.log("Queryy")
+
+    const patientId = req.msg.getSegment('QRD').getComponent(8, 1);
+
+    const newMsg = getPatientData(patientId,req.msg, res)
+
   }
-  // app.stop()
+
   next();
 });
-
-
-// app.use(function(req, res, next) {
-//   const pidSegment = req.msg.getSegment('PID');
-//   const pidJson = {};
-//   pidSegment.fields.forEach((field, index) => {
-//     pidJson[`field${index + 1}`] = field.value.join('|');
-//   });
-
-//   app.stop()
-//   next();
-// });
 
 
 function sendData(data){
@@ -64,68 +52,86 @@ function sendData(data){
   });
 }
 
+async function getPatientData(patientId, msg,res) {
+  
+  try {
+    const parsedUserId = parseInt(patientId);
+      const data = await prisma.user.findUnique({
+        where: {
+          userId: parsedUserId,
+          role: 'Patient',
+        }
+      });
 
-function createMessageData(messageType, data) {
-  var hl7 = require('simple-hl7');
-  var adt = new hl7.Message(
-    "" ,
-     "",
-     "",
-     "",
-     "",
-     "",
-     messageType ,
- );
- 
- adt.addSegment("PID",
- "", //Blank field
- ["","",""],
- "",
- );
- var pid = adt.getSegment("PID");
- if(messageType[0]=="ADT"){
-  adt.addSegment("DG1",
-  "", //Blank field
-  "", //Multiple components
-  "",
-  "",
-  "", //Date & Time
-  );
- }else if(messageType[0]=="QRY"){
-  adt.addSegment("QRD",
-  "", //Blank field
-  "", //Multiple components
-  "",
-  "",
-  "", //Date & Time
-  "",
-  "",
-  ["","sent" ]
-  );
- }
-//    else if(messageType[0]=="ACK"){
-//     adt.addSegment("ACK",
-//     "", //Blank field
-//     "", //Multiple components
-//     "",
-//     "",
-//     "", //Date & Time
-//     "",
-//     "",
-//     [data.id,data.lastName,data.firstName, ]
-//     );
-//    }
+      const diagnosis = await prisma.Illness.findMany({
+        where: {
+          medicalHistoryId: parsedUserId,
+        }
+      });
+      console.log(diagnosis.description)
+  msg.header.setField(8, ["ADR", "A19"])
 
- var parser = new hl7.Parser();
- var msg = parser.parse(adt.toString());
-return msg;
+  msg.addSegment("PID",
+  "", //Blank field
+  data.ssn,
+  data.userId,
+  "",
+  [data.lastName, data.firstName],
+  "",
+  data.dateOfBirth,
+  data.gender
+  );
+
+  // msg.addSegment("DG1",
+  // "", //Blank field
+  // "", //Multiple components
+  // "",
+  // diagnosis.description,
+  // "", //Date & Time
+  // );
+
+  diagnosis.forEach(diagnosis => {
+    msg.addSegment("DG1",
+      "", //Blank field
+      "", //Multiple components
+      "",
+      diagnosis.description,
+      "", //Date & Time
+    );
+  });
+
+  // console.log("line")
+  // msg.addSegment("DG1",
+  // "", //Blank field
+  // "", //Multiple components
+  // "",
+  // "Cold and fleu",
+  // 202205010930,
+  // );
+
+  // console.log("line")
+  res.ack = msg;
+  console.log("------------------------" + res.ack.log());
+  res.end();
+
+  return msg;
+    // return patientData;
+  } catch (error) {
+    console.error('Error fetching patient data:', error);
+    throw error; // Rethrow the error to be handled by the caller
+  }
+}
+
+function createMessage(msg, data) {
+  // var hl7 = require('simple-hl7');
+  
 }
 
 
 //Send Ack
 app.use(function(req, res, next) {
   // console.log('sending ack')
-  res.end();
+  // res.end();
   // // res.json({ data:"hiClient" }); 
 })
 
