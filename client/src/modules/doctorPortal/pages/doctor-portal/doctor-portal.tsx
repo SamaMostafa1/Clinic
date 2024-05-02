@@ -48,7 +48,10 @@ const PatientData = () => {
 
   const patients = useSelector((state: any) => state.slotsReducer.slots.data);
   const patientHistory = useSelector(
-    (state: any) => state.patientReducer.patients
+    (state: any) => state.patientReducer.patients[0]
+  );
+  const patientDiagnosis = useSelector(
+    (state: any) => state.patientReducer.patients[0]
   );
 
   //const [isVisible, setTestsVisibility] = useState(() => {})
@@ -89,7 +92,7 @@ const PatientData = () => {
           {!load ? (
             <>
               <BlockData patient={patientHistory} isTrue={true} />
-              <HistoryData id={id} data={""} />
+              <HistoryData id={id} data={patientDiagnosis} />
             </>
           ) : (
             <div

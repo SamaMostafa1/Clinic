@@ -20,7 +20,7 @@ export const BlockData = ({
         <ul>
           
             <>
-              <li>Name: {`${patient.firstName} ${patient.lastName}`}</li>
+              <li>Name: {`${patient?.firstName} ${patient?.lastName}`}</li>
               {/* <li>Weight: {`${patient.weight}`}</li>
               <li>Height: {`${patient.length}`}</li> */}
             </>

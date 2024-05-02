@@ -175,8 +175,8 @@ const patientSlice = createSlice({
     });
     builder.addCase(getPatientHistory.fulfilled, (state, action) => {
       state.loading = false;
-      console.log("gggggggggggggg", action.payload);
-      state.patients.push(...state.patients, action.payload);
+      console.log("gggggggggggggg", action.payload.data);
+      state.patients.push(...state.patients, action.payload.data);
     });
   },
 });

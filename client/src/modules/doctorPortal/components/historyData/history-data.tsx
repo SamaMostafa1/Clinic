@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useSelector } from "react-redux";
 import classes from "../blockData/block.module.css";
 export const HistoryData = ({
   id,
@@ -8,7 +9,17 @@ export const HistoryData = ({
   id: string | undefined;
   data: any;
 }) => {
-  const dataArray = Object.values(data);
+  const loggedUser = useSelector(
+    (state: any) => state.authReducer.loggedInData.data
+  );
+  let dataArray = [];
+  if (loggedUser.role === "Patient") {
+    dataArray = Object.values(data);
+  } else {
+    dataArray = data?.diagnosis;
+    console.log(dataArray);
+  }
+
   return (
     <div className={`${classes.block} ${classes["block-no-margin"]}`}>
       <h2 className={classes.header}>History Data</h2>
@@ -30,7 +41,7 @@ export const HistoryData = ({
                     key={index}
                     style={{ color: "black", margin: "0px", padding: "0px" }}
                   >
-                    {item.description}
+                    {item}
                   </li>
                 ))}
               </ul>
