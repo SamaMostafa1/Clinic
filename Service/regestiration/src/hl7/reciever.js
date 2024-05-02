@@ -16,9 +16,16 @@ app.use(function(req, res, next) {
     sendData(data);
     console.log("ADTT END")
   } else if (req.event == "A19" && req.type == "QRY"){
+    const patientId = req.msg.getSegment('PID').getComponent(2, 4);
+    // patient = {
+    //   "data": 2
+    // }
+    // const msg = createMessageData(["ADT","A08"],patient)
+    console.log("sent " + msg.log());
+    app.send(msg);
     console.log("Queryy")
   }
-
+  // app.stop()
   next();
 });
 
@@ -72,7 +79,7 @@ function createMessageData(messageType, data) {
  
  adt.addSegment("PID",
  "", //Blank field
- ["","","", data.userId],
+ ["","",""],
  "",
  );
  var pid = adt.getSegment("PID");
@@ -81,7 +88,7 @@ function createMessageData(messageType, data) {
   "", //Blank field
   "", //Multiple components
   "",
-  data.diagnosis,
+  "",
   "", //Date & Time
   );
  }else if(messageType[0]=="QRY"){
@@ -93,7 +100,7 @@ function createMessageData(messageType, data) {
   "", //Date & Time
   "",
   "",
-  [data.userId, data.lastName,data.firstName, ]
+  ["","sent" ]
   );
  }
 //    else if(messageType[0]=="ACK"){
@@ -118,8 +125,8 @@ return msg;
 //Send Ack
 app.use(function(req, res, next) {
   // console.log('sending ack')
-  // res.end();
-  // res.json({ data:"hiClient" }); 
+  res.end();
+  // // res.json({ data:"hiClient" }); 
 })
 
 
