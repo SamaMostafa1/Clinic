@@ -13,17 +13,19 @@
   -webkit-text-fill-color: black;
 }
 
-.header{
+.header {
   font-size: 25px;
   font-weight: 500;
 }
 
 .block-no-margin {
   margin-right: 0;
+  width: 70%;
 }
 
 .block3 {
   margin-top: 10px;
+  height:300px;
   /* height: 200px; */
   display: flex;
   border-radius: 15px;

@@ -54,7 +54,7 @@ export const getDataRecord = createAsyncThunk(
   "patients/getDataRecord",
   (data: number | undefined) => {
     return axios
-      .get(`http://localhost:10000/EMR/patient/2/record`)
+      .get(`http://localhost:10000/EMR/patient/2/medicalHistory`)
       .then((res) => {
         return res.data;
       })
@@ -97,8 +97,8 @@ const patientSlice = createSlice({
       state.error = action.error.message as string;
     });
     builder.addCase(getDataRecord.fulfilled, (state, action) => {
-      state.patients.push(...action.payload);
-      console.log(action.payload);
+      state.patients.push(action.payload);
+      console.log("recordddd",action.payload);
     });
   },
 });

@@ -14,23 +14,19 @@ export const BlockData = ({
   isTrue: boolean;
 }) => {
   return (
-    <div className={classes.block}>
-      {
-        <>
-          <h2 className={classes.header}>Patient Data</h2>
-          <ul>
-            <li>Name: {`${patient.firstName} ${patient.lastName}`}</li>
-            {/* <li>Name: {`${patient?.firstName} ${patient?.lastName}`}</li> */}
-            <li>Weight: {`${patient.weight}`}</li>
-            <li>Height: {`${patient.length}`}</li>
-            {/* <li>Age: 65 </li>
-            <li>Weight: 70</li>
-            <li>Height: 170</li>
-            <li>Gender: male</li>
-            <li>Blood Type: A-</li> */}
-          </ul>
-        </>
-      }
+    <div className={classes.block} style={{width:"30%"}}>
+      <>
+        <h2 className={classes.header}>Patient Data</h2>
+        <ul>
+          
+            <>
+              <li>Name: {`${patient.firstName} ${patient.lastName}`}</li>
+              <li>Weight: {`${patient.weight}`}</li>
+              <li>Height: {`${patient.length}`}</li>
+            </>
+         
+        </ul>
+      </>
     </div>
   );
 };

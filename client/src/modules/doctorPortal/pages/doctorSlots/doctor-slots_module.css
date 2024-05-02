@@ -1,0 +1,6 @@
+.pageContainer {
+    width: 80%;
+    height: 100vh; /* Make the container take the full height of the viewport */
+    margin: auto; /* Push the container to the right */
+    overflow: hidden;
+  }
