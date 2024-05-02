@@ -26,6 +26,7 @@ export const createDiagnosis= async (req: Request, res: Response) => {
     validate.handleErrors(error, res);
   } 
 };
+
 export const getPatientInfo= async (req: Request, res: Response) => {
     const { userId } = req.params;
     const parsedUserId = parseInt(userId);
@@ -44,6 +45,7 @@ export const getPatientInfo= async (req: Request, res: Response) => {
       validate.handleErrors(error, res);
     } 
   };
+  
 function createMessageData(messageType:any,data:any,) {
     var hl7 = require('simple-hl7');
     var adt = new hl7.Message(

@@ -6,14 +6,14 @@ var client = hl7.Server.createTcpClient({
   host: '127.0.0.1',
   port: 3888,
   keepalive: true,
-  callback: function(err, data) {
+  callback: function(err, ACK) {
     if (err) {
       console.log("*******ERROR********");
       console.log(err.message);
     } else {
-      console.log(data);
+      console.log(ACK.log());
       // if(data=="hiClient"){
-        client.send(msg);
+        // client.send(msg);
       // }
     }
   }
