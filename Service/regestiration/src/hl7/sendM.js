@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-var-requires */
 var hl7 = require('simple-hl7');
  function sendM(message) {
  //server connnection

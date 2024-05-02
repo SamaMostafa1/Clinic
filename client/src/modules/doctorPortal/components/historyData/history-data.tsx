@@ -20,13 +20,16 @@ export const HistoryData = ({
                 border: "2px solid ",
                 padding: "5px",
                 borderRadius: "5px",
-
+                width: "30%",
               }}
             >
               <h3 style={{ fontWeight: "500", margin: "0px" }}> Illnesses</h3>
-              <ul style={{margin:"0"}}>
+              <ul style={{ margin: "0" }}>
                 {dataArray.map((item: any, index: number) => (
-                  <li key={index} style={{ color: "black" , margin:"0px", padding:"0px"}}>
+                  <li
+                    key={index}
+                    style={{ color: "black", margin: "0px", padding: "0px" }}
+                  >
                     {item.description}
                   </li>
                 ))}

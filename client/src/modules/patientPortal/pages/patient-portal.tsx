@@ -58,16 +58,16 @@ export const PatientPortal = () => {
           >
             <h2>Your Data</h2>
           </div>
-          {patient.weight ? (
-            <>
+          {historyData[0] ? (
+            <div style={{ height: "100vh" }}>
               <div className={classes.flexContainer}>
                 <BlockData patient={patient} isTrue={true} />
                 <HistoryData id={id} data={historyData} />
               </div>
               <div>
-                <DiagnosisData id="" />
+                <DiagnosisData id={parsedId} />
               </div>
-            </>
+            </div>
           ) : (
             <div
               style={{
