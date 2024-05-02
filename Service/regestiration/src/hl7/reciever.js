@@ -8,10 +8,11 @@ const prisma = new PrismaClient();
 
 app.use(function(req, res, next) {
 
-  console.log('Message:\n ' + req.msg.log());
+  console.log("=================== Message Received ===================")
+  console.log(req.msg.log());
+  
   
   if (req.event == "A08" && req.type == "ADT"){
-    console.log("ADTTTT");
     const patientId = req.msg.getSegment('PID').getComponent(2, 4);
     const illnessDesc = req.msg.getSegment('DG1').getComponent(4, 1);
     const data = {
@@ -19,7 +20,8 @@ app.use(function(req, res, next) {
       "medicalHistoryId": patientId,
     };
     sendData(data);
-    console.log("ADTT END")
+    console.log("=================== Acknowledgment Sent ================")
+    res.end();
   } else if (req.event == "A19" && req.type == "QRY"){
 
     const patientId = req.msg.getSegment('QRD').getComponent(8, 1);
@@ -70,8 +72,7 @@ async function getPatientData(patientId, msg,res) {
           medicalHistoryId: parsedUserId,
         }
       });
-      console.log(diagnosis.description)
-  msg.header.setField(8, ["ADR", "A19"])
+  msg.header.setField(7, ["ADR", "A19"])
 
   msg.addSegment("PID",
   "", //Blank field
@@ -84,13 +85,6 @@ async function getPatientData(patientId, msg,res) {
   data.gender
   );
 
-  // msg.addSegment("DG1",
-  // "", //Blank field
-  // "", //Multiple components
-  // "",
-  // diagnosis.description,
-  // "", //Date & Time
-  // );
 
   diagnosis.forEach(diagnosis => {
     msg.addSegment("DG1",
@@ -102,40 +96,25 @@ async function getPatientData(patientId, msg,res) {
     );
   });
 
-  // console.log("line")
-  // msg.addSegment("DG1",
-  // "", //Blank field
-  // "", //Multiple components
-  // "",
-  // "Cold and fleu",
-  // 202205010930,
-  // );
-
-  // console.log("line")
   res.ack = msg;
-  console.log("------------------------" + res.ack.log());
+  // console.log("------------------------" + res.ack.log());
   res.end();
+  console.log("=================== Acknowledgment Sent ================")
 
   return msg;
-    // return patientData;
   } catch (error) {
     console.error('Error fetching patient data:', error);
-    throw error; // Rethrow the error to be handled by the caller
+    throw error; 
   }
-}
-
-function createMessage(msg, data) {
-  // var hl7 = require('simple-hl7');
-  
 }
 
 
 //Send Ack
-app.use(function(req, res, next) {
+// app.use(function(req, res, next) {
   // console.log('sending ack')
   // res.end();
   // // res.json({ data:"hiClient" }); 
-})
+// })
 
 
 app.start(3888);

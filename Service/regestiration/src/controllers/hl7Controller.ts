@@ -33,7 +33,7 @@ export const createDiagnosis= async (req: Request, res: Response) => {
 async function fetchData(message:any) {
   try {
     const data = await sendM(message);
-    console.log("Received data:", data);
+    // console.log("Received data:", data);
     return data;
   } catch (error) {
     console.error("Error:", error);
@@ -96,7 +96,7 @@ function createMessageData(messageType:any,data:any,) {
     "", //Date & Time
     "",
     "",
-    [data.userId, data.lastName,data.firstName, ]
+    [data.userId ]
     );
    }
  
