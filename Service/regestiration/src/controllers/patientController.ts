@@ -3,7 +3,6 @@
 import { Request, Response } from 'express';
 import { Prisma, PrismaClient } from '@prisma/client';
 import hashing from '../Scripts/hashing';
-// import * as controller from './patientController';
 import * as validate from '../Scripts/validation';
 import validation from '../Scripts/validation';
 const prisma = new PrismaClient();
@@ -11,7 +10,6 @@ const prisma = new PrismaClient();
 //-----------------------Create Patient --------------------------------
 export const createPatient = async (req: Request, res: Response) => {
   const patientData = req.body;
-  console.log("ppppppppppppppppppppppppppp");
   console.log(patientData);
   try {
     if(patientData.role!=='Patient'){

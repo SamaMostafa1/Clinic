@@ -43,22 +43,6 @@ export const loginUser = async (req: Request, res: Response) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: '1d' }
     );
-
-    // Generate refresh token
-//   const refreshToken = jwt.sign(
-//       { userId: user.userId },
-//       process.env.REFERSH_TOKEN_SECRET,
-//       { expiresIn: '1d' }
-//   );
-  
-//   const updatedUser = await prisma.user.update({
-//     where: {
-//       userName: userName // Specify the condition to identify the user to update
-//     },
-//     data: {
-//       refreshToken: refreshToken // Provide the new value for refreshToken
-//     }
-// });
      res.cookie('access-token', accessToken, { httpOnly: true,  secure: true, maxAge: 24 * 60 * 60 * 1000 });
     res.status(200).json({ accessToken: accessToken});
   } catch (error) {
@@ -68,10 +52,6 @@ export const loginUser = async (req: Request, res: Response) => {
     await prisma.$disconnect();
   }
 };
-
-// export const logedIn = async (req: Request, res: Response) => {
-//   return res.status(200).json({ message: "You are innnnn" });
-// };
 
 export const logedIn= async (req: Request, res: Response) => {
   return res.status(200).json({ data:req.user});

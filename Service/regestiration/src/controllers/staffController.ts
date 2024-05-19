@@ -62,27 +62,26 @@ export const getStaffById = async (req: Request, res: Response) => {
 
 //-------------------Get  all docotrs By clinicID-----------------------
 export const getDoctorsByClinicID  = async (req: Request, res: Response) => {
-//   const getDoctorsByClinicID = async (req, res) => {
-    const {clinicId } = req.params;
-    try {
-      const parsedClinicId = parseInt(clinicId);
-      if (isNaN(parsedClinicId)) {
-        throw new Error('Invalid clinic ID format. Please enter an integer.');
-      }
-      const userMember = await prisma.user.findMany({
-        where: {
-          clinicId : parsedClinicId,
-          role: "Doctor",
-        },
-      });
-        res.status(200).json({ data: userMember });
-    } catch (error: any) {
-      console.error(error);
-      res.status(400).json({ error: error.message });
-    } finally {
-      await prisma.$disconnect();
+  const {clinicId } = req.params;
+  try {
+    const parsedClinicId = parseInt(clinicId);
+    if (isNaN(parsedClinicId)) {
+      throw new Error('Invalid clinic ID format. Please enter an integer.');
     }
-  };
+    const userMember = await prisma.user.findMany({
+      where: {
+        clinicId : parsedClinicId,
+        role: "Doctor",
+      },
+    });
+      res.status(200).json({ data: userMember });
+  } catch (error: any) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  } finally {
+    await prisma.$disconnect();
+  }
+};
 
 //-------------------Create New Staff -----------------------
 export const createStaff = async (req: Request, res: Response) => {

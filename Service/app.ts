@@ -18,9 +18,6 @@ const port = process.env.PORT ||10000;
 //built-in middleware for json
 app.use(express.json());
 
-
-
-// app.use(express.json());
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -35,62 +32,9 @@ app.use('/staff', staffRouter);
 app.use('/patient', patientRouter);
 app.use('/user',userRouter );
 // app.use(verifyToken);
-// EMR Paths
-
-
 
 // app.use('/logedIn', logedIn);
 
 app.listen(port, () => {
   console.log(`Server is listening at http://localhost:${port}`);
 });
-
-
-/*
-// ######################################### TCP SERVER #########################################
-
-const server = http.createServer(app);
-
-// Setup CORS
-const io = socketIo(server, {
-  cors: {
-    origin: "http://localhost:3000",  // This should match the URL of your client app
-    methods: ["GET", "POST"],
-    allowedHeaders: ["my-custom-header"],
-    credentials: true
-  }
-});
-
-io.on('connection', (socket) => {
-  console.log('New client connected');
-  
-  socket.on('sendData', async (data) => {
-
-    const parsedData = JSON.parse(data);
-    // console.log(parsedData);
-    const scenario = parsedData.scenario;
-    delete parsedData["scenario"];
-
-    let response;
-
-    if (scenario === "createAppointment") {
-        const id = parsedData.id;
-        delete parsedData["id"];
-        response = await createAppointment(parsedData, id);
-    } else {
-        response = await registerPatient(parsedData);
-        console.log(response)
-
-    }
-
-    socket.write(JSON.stringify(response));
-    });
-
-  socket.on('disconnect', () => {
-    console.log('Client disconnected');
-  });
-});
-
-server.listen(8080, () => {
-  console.log('Listening on port 8080');
-});*/

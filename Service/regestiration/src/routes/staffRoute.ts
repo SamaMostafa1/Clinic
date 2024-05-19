@@ -12,14 +12,6 @@ router.get("/", staffController.getAllstaff); //  doctors and admin
 router.get("/:userId", verifyToken, staffController.getStaffById);
 router.get("/clinic/:clinicId", staffController.getDoctorsByClinicID);
 router.post("/", staffController.createStaff);
-router.put(
-  "/:userId",
-  [verifyToken, verifyDoctor],
-  staffController.updateStaff
-);
-router.delete(
-  "/:userId",
-  [verifyToken, verifyDoctor],
-  staffController.deleteStaff
-);
+router.put("/:userId", [verifyToken, verifyDoctor], staffController.updateStaff);
+router.delete("/:userId", [verifyToken, verifyDoctor], staffController.deleteStaff);
 export default router;

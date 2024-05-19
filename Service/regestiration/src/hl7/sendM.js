@@ -8,8 +8,7 @@ async function sendM(message) {
   return new Promise((resolve, reject) => {
     // Server connection
     var client = hl7.Server.createTcpClient({
-      // host: '45.247.123.161',
-      host: '127.0.0.1',
+      host: '127.0.0.1', // or Server Global IP address
       port: 3888,
       keepalive: true,
       callback: async function(err, ACK) {
@@ -47,8 +46,6 @@ async function sendM(message) {
 
     console.log("=================== Sending 1 message ===================")
     console.log(msg.log());
-    // console.log('************Sending 1 message****************');
-
     // Send the message
     client.send(msg);
   });
