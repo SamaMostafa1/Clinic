@@ -1,5 +1,4 @@
-
-# IMAGE LAP
+# Orthopedic clinic
 
 ## Table of contents:
 
@@ -42,11 +41,11 @@ The Web Application is built using:
 
 | Team Members' Names                                  | 
 | ---------------------------------------------------- | 
-| [Rawan Rashad]       | 
-| [Rawda Yousry]       | 
-| [Sara Amgad]       | 
-| [Sama Mostafa]      |           |
-| [Yousr Ashraf]        |   
+| Rawan Rashad       | 
+| Rawda Yousry     | 
+| Sara Amgad      | 
+| Sama Mostafa      |           |
+| Yousr Ashraf        |   
 
 
     
